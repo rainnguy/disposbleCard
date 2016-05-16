@@ -4,17 +4,12 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
@@ -37,7 +32,6 @@ import com.banxian.util.DateUtil;
 import com.banxian.util.SysConsts;
 import com.banxian.util.TreeObject;
 import com.banxian.util.TreeUtil;
-import com.mysql.jdbc.Connection;
 
 /**
  * 进行管理后台框架界面的类
@@ -154,7 +148,6 @@ public class BackgroundController extends BaseController {
 
 		String ctxPath = request.getSession().getServletContext().getRealPath("/") + "\\" + "filezip\\";
 		String downLoadPath = ctxPath + fileName;
-		System.out.println(downLoadPath);
 		try {
 			long fileLength = new File(downLoadPath).length();
 			response.setContentType("application/x-msdownload;");
@@ -185,30 +178,6 @@ public class BackgroundController extends BaseController {
 		return "redirect:login.sxml";
 	}
 
-	@RequestMapping("install")
-	public String install() throws Exception {
-
-		try {
-			Properties props = Resources.getResourceAsProperties("jdbc.properties");
-			String url = props.getProperty("jdbc.url");
-			String driver = props.getProperty("jdbc.driverClass");
-			String username = props.getProperty("jdbc.username");
-			String password = props.getProperty("jdbc.password");
-			Class.forName(driver).newInstance();
-			Connection conn = (Connection) DriverManager.getConnection(url, username, password);
-			ScriptRunner runner = new ScriptRunner(conn);
-			runner.setErrorLogWriter(null);
-			runner.setLogWriter(null);
-			runner.runScript((new InputStreamReader(getClass().getResourceAsStream("/intall.sql"),"UTF-8")));
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "初始化失败！请联系管理员" + e;
-		}
-
-		return "/install";
-	}
-	
 	private void generateLoginRecords(String username, HttpServletRequest request) throws Exception {
 		UserLoginFormBean userFormBean = new UserLoginFormBean();
 		Session session = SecurityUtils.getSubject().getSession();

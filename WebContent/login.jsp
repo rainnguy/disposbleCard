@@ -9,7 +9,7 @@
 <link href="/favicon.ico" type="image/x-icon" rel=icon>
 <link href="/favicon.ico" type="image/x-icon" rel="shortcut icon">
 <meta name="renderer" content="webkit">
-<title>登录－加气实时监控</title>
+<title>登录－卡卷优惠系统</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet"
 	href="${pageContext.servletContext.contextPath }/admin_files/min.css">
@@ -32,7 +32,7 @@
 						<td align="left"><img
 							src="${pageContext.servletContext.contextPath }/admin_files/logo_left.png"
 							alt="Logo"></td>
-							<td align="center" style="font-weight: bold;color: gray;">加气实时监控</td>
+							<td align="center" style="font-weight: bold;color: gray;">卡卷优惠系统</td>
 						<td align="right"><img
 							src="${pageContext.servletContext.contextPath }/admin_files/logo_left.png"
 							alt="Logo"></td>
@@ -64,8 +64,6 @@
 			<div class="form-actions">
 				<span class="pull-left" style="width: 33%"><a href="#"
 					class="flip-link btn btn-info" id="to-recover">忘记密码？</a></span>
-					<span class="pull-left" style="width: 33%"><a href="install.sxml"
-					class="flip-link btn btn-danger" id="to-recover">一键初始化系统</a></span>
 					 <span
 					class="pull-right"><a type="submit"
 					href="javascript:checkUserForm()" class="btn btn-success">登&nbsp;&nbsp;录</a></span>
