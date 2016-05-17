@@ -1,48 +1,27 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<!-- /.aside -->
-<link rel="stylesheet" href="./notebook/widgets/app.v1.css" type="text/css">
-<link rel="stylesheet" href="./notebook/widgets/font.css" type="text/css">
-
-<section id="content">
-	<section class="vbox">
-		<header class="header bg-white b-b b-light">
-			<p>
-				Widgets <small>(colorful)</small>
-			</p>
-		</header>
-		<section class="scrollable wrapper">
-			<div class="col-lg-10">
-				<div class="row">
-					<c:forEach var="key" items="${stationFormMap}" varStatus="s">
-						<div class="col-sm-6">
-						<section class="panel panel-default">
-							<header class="panel-heading bg-danger lt no-border">
-								<div class="clearfix">
-									<div class="clear">
-										<div class="h3 m-t-xs m-b-xs text-white">名称:&nbsp;${key.orgName}</div>
-										<div><small class="badge bg-success">编号 -- ${key.orgCode}</small></div>
-									</div>
-								</div>
-							</header>
-							<div class="list-group no-radius alt">
-								<a class="list-group-item" href="#">
-									<span class="badge bg-success"></span>联系电话:&nbsp;${key.orgTel}
-								</a>
-								<a class="list-group-item" href="#">
-									<span class="badge bg-success">25</span>未处理的报警数:&nbsp;//TODO
-								</a>
-								<a class="list-group-item" href="/GasMonitor/role/addUI.sxml">详细信息</a> 
-							</div>
-						</section>
-					</div>
-					</c:forEach>
-				</div>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<header class="header bg-white b-b b-light">
+		<p>
+			<big>首页</big>&nbsp;&nbsp;<small>礼品卡消费</small>
+		</p>
+	</header>
+<body>
+	<form id="form" name="form" class="form-horizontal" method="post"
+		action="${ctx}/disposableCard/pay.sxml">
+		<div class="form-group">
+			<label class="col-sm-3 control-label">卡号：</label>
+			<div class="col-sm-9">
+				<input type="text" class="form-control" placeholder="请输入卡号"
+					name="payInfoMap.code" id="code">
 			</div>
-		</section>
-	</section>
-	<a href="#" class="hide nav-off-screen-block"
-		data-toggle="class:nav-off-screen, open" data-target="#nav,html"></a>
-</section>
+		</div>
+		<button type="submit" class="btn btn-success btn-s-xs">付款</button>
+	</form>
+	<form id="form2" name="form2" class="form-horizontal" method="post"
+		action="${ctx}/disposableCard/issue.sxml">
+		<button type="submit" class="btn btn-success btn-s-xs">发卡</button>
+	</form>
+</body>
+</html>
