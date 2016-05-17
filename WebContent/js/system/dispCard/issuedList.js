@@ -13,9 +13,9 @@ $(function() {
 			name : "发卡的站"
 		}, {
 			colkey : "issuedDate",
-			name : "发卡时间",
+			name : "发卡日期",
 			renderData : function(rowindex, data, rowdata, column) {
-				// return new Date(data).format("yyyy-MM-dd hh:mm:ss");
+//				return new Date(data).format("yyyy-MM-dd hh:mm:ss");
 				return data;
 			}
 		} ],
