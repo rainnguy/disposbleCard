@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.banxian.mapper.dispCard.CardReportMapper">
+	<!--mybatis ehcache缓存配置 -->
+	<!-- 以下两个<cache>标签二选一,第一个可以输出日志,第二个不输出日志 <cache type="org.mybatis.caches.ehcache.LoggingEhcache" 
+		/> -->
+	<!-- <cache type="org.mybatis.caches.ehcache.EhcacheCache"/> -->
+	<!-- 以下与实体类的中字段一致 -->
+	
+	<sql id="selectId">
+		<!-- common fields -->
+	</sql>
+
+	<select id="findIssuedData" resultType="com.banxian.entity.dispCard.IssuedInfoMap">
+		select
+			t1.code as code,
+			t1.value as value,
+			t2.orgName as orgName,
+			t1.issuedDate as issuedDate
+		from
+			disp_card t1,
+			sys_orga t2
+		where
+			t1.issuedStation = t2.orgCode
+			<choose>
+			<when test="orgName != null and orgName != ''">
+				and t2.orgName like '%${orgName}%'
+			</when>
+			<otherwise>
+				<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
+					and t1.issuedStation = '${orgCode}'
+				</if>
+			</otherwise>
+			</choose>
+			<if test="money != null and money != ''">
+				and t1.value = '${money}'
+			</if>
+			<if test="startDate != null and startDate != ''">
+				and t1.issuedDate &gt;= '${startDate}'
+			</if>
+			<if test="endDate != null and endDate != ''">
+				and t1.issuedDate &lt;= '${endDate}'
+			</if>
+		order by t1.issuedDate,t1.code
+	</select>
+	
+</mapper>
