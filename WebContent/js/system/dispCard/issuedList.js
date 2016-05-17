@@ -1,5 +1,4 @@
 var grid = null;
-alert("!!!!");
 $(function() {
 	grid = lyGrid({
 		pagId : 'paging',
