@@ -9,7 +9,7 @@
 <link href="/favicon.ico" type="image/x-icon" rel=icon>
 <link href="/favicon.ico" type="image/x-icon" rel="shortcut icon">
 <meta name="renderer" content="webkit">
-<title>登录－卡卷优惠系统</title>
+<title>登录－卡劵优惠系统</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet"
 	href="${pageContext.servletContext.contextPath }/admin_files/min.css">
@@ -32,7 +32,7 @@
 						<td align="left"><img
 							src="${pageContext.servletContext.contextPath }/admin_files/logo_left.png"
 							alt="Logo"></td>
-							<td align="center" style="font-weight: bold;color: gray;">卡卷优惠系统</td>
+							<td align="center" style="font-weight: bold;color: gray;">卡劵优惠系统</td>
 						<td align="right"><img
 							src="${pageContext.servletContext.contextPath }/admin_files/logo_left.png"
 							alt="Logo"></td>
