@@ -8,10 +8,63 @@
 	<!-- <cache type="org.mybatis.caches.ehcache.EhcacheCache"/> -->
 	<!-- 以下与实体类的中字段一致 -->
 	
-	<sql id="selectId">
-		<!-- common fields -->
+	<sql id="CommonQualification">
+		and t1.issuedStation = t2.orgCode
+		and t1.status = t3.constantValue
+		and t3.kind = '11'
+		<choose>
+			<when test="orgName != null and orgName != ''">
+				and t2.orgName like '%${orgName}%'
+			</when>
+			<otherwise>
+				<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
+					and t1.issuedStation = '${orgCode}'
+				</if>
+			</otherwise>
+		</choose>
+		<if test="money != null and money != ''">
+			and t1.value = '${money}'
+		</if>
 	</sql>
-
+	
+	<sql id="time">
+		<if test="startDate != null and startDate != ''">
+			and t1.issuedDate &gt;= '${startDate}'
+		</if>
+		<if test="endDate != null and endDate != ''">
+			and t1.issuedDate &lt;= '${endDate}'
+		</if>
+	</sql>
+	
+	<sql id="SummaryComPart">
+		select
+			count(1) totalNum, sum(value) as amount
+		from
+			disp_card,
+			sys_constant,
+			sys_orga
+		where
+			issuedStation = orgCode
+			and status = constantValue
+			and kind = '11'
+		<choose>
+			<when test="orgName != null and orgName != ''">
+				and orgName like '%${orgName}%'
+			</when>
+			<otherwise>
+				<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
+					and issuedStation = '${orgCode}'
+				</if>
+			</otherwise>
+		</choose>
+		<if test="startDate != null and startDate != ''">
+			and issuedDate &gt;= '${startDate}'
+		</if>
+		<if test="endDate != null and endDate != ''">
+			and issuedDate &lt;= '${endDate}'
+		</if>
+	</sql>
+	
 	<select id="findIssuedData" resultType="com.banxian.entity.dispCard.IssuedInfoMap">
 		select
 			t1.code as code,
@@ -23,29 +76,9 @@
 			sys_orga t2,
 			sys_constant t3
 		where
-			t1.issuedStation = t2.orgCode
-			and t1.status = '1'
-			and t3.kind = '11'
-			and t1.status = t3.constantValue
-			<choose>
-			<when test="orgName != null and orgName != ''">
-				and t2.orgName like '%${orgName}%'
-			</when>
-			<otherwise>
-				<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
-					and t1.issuedStation = '${orgCode}'
-				</if>
-			</otherwise>
-			</choose>
-			<if test="money != null and money != ''">
-				and t1.value = '${money}'
-			</if>
-			<if test="startDate != null and startDate != ''">
-				and t1.issuedDate &gt;= '${startDate}'
-			</if>
-			<if test="endDate != null and endDate != ''">
-				and t1.issuedDate &lt;= '${endDate}'
-			</if>
+			t1.status &lt;&gt; '3'
+			<include refid="CommonQualification" />
+			<include refid="time" />
 		order by t1.issuedDate desc, t1.code
 	</select>
 	
@@ -62,26 +95,11 @@
 			sys_constant t3,
 			sys_orga t4
 		where
-			t1.issuedStation = t2.orgCode
-			and t1.usedStation = t4.orgCode
+			t1.usedStation = t4.orgCode
 			and t1.status = '2'
-			and t1.status = t3.constantValue
-			and t3.kind = '11'
-			<choose>
-			<when test="issuedStaName != null and issuedStaName != ''">
-				and t2.orgName like '%${issuedStaName}%'
-			</when>
-			<otherwise>
-				<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
-					and t1.issuedStation = '${orgCode}'
-				</if>
-			</otherwise>
-			</choose>
+			<include refid="CommonQualification" />
 			<if test="usedStaName != null and usedStaName != ''">
 				and t4.orgName like '%${usedStaName}%'
-			</if>
-			<if test="money != null and money != ''">
-				and t1.value = '${money}'
 			</if>
 			<if test="startDate != null and startDate != ''">
 				and t1.usedTime &gt;= '${startDate}'
@@ -104,33 +122,42 @@
 			sys_orga t2,
 			sys_constant t3
 		where
-			t1.issuedStation = t2.orgCode
-			and t1.status = '3'
-			and t3.kind = '11'
-			and t1.status = t3.constantValue
-			<choose>
-			<when test="orgName != null and orgName != ''">
-				and t2.orgName like '%${orgName}%'
-			</when>
-			<otherwise>
-				<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
-					and t1.issuedStation = '${orgCode}'
-				</if>
-			</otherwise>
-			</choose>
-			<if test="money != null and money != ''">
-				and t1.value = '${money}'
-			</if>
-			<if test="startDate != null and startDate != ''">
-				and t1.issuedDate &gt;= '${startDate}'
-			</if>
-			<if test="endDate != null and endDate != ''">
-				and t1.issuedDate &lt;= '${endDate}'
-			</if>
+			t1.status = '1'
+			<include refid="CommonQualification" />
+			<include refid="time" />
 			<if test="inDate != null and inDate != ''">
 				and t1.indate &lt;= '${inDate}'
 			</if>
 		order by t1.indate, t1.code
+	</select>
+	
+	<select id="findSummaryData" resultType="com.banxian.entity.dispCard.SummaryInfoMap">
+		select
+			t1.totalNum as issueTotal,
+			t1.amount as issueAmount,
+			t2.totalNum as usedTotal,
+			t2.amount as usedAmount,
+			t3.totalNum as useAbleTotal,
+			t3.amount as useAbleAmount,
+			t4.totalNum as outDateTotal,
+			t4.amount as outDateAmount
+		from
+			(
+			<include refid="SummaryComPart" />
+			and status &lt;&gt; '3'
+			) t1,
+			(
+			<include refid="SummaryComPart" />
+			and status = '2'
+			) t2,
+			(
+			<include refid="SummaryComPart" />
+			and status = '1'
+			) t3,
+			(
+			<include refid="SummaryComPart" />
+			and status = '4'
+			) t4
 	</select>
 	
 </mapper>

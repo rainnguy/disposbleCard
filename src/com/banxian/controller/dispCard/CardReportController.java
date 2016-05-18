@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.banxian.controller.index.BaseController;
 import com.banxian.entity.dispCard.IssuedInfoMap;
+import com.banxian.entity.dispCard.SummaryInfoMap;
 import com.banxian.entity.dispCard.UnusedInfoMap;
 import com.banxian.entity.dispCard.UsedInfoMap;
 import com.banxian.plugin.PageView;
@@ -36,7 +37,7 @@ public class CardReportController extends BaseController {
 	}
 	
 	/**
-	 * 发卡报表
+	 * 未消费报表
 	 * 
 	 * @param pageNow
 	 * @param pageSize
@@ -138,6 +139,46 @@ public class CardReportController extends BaseController {
 				Common.findAttrValue(SysConsts.ORG_CODE));
 		
 		pageView.setRecords(UsedInfoMap.mapper().findUsedData(usedInfoMap));
+
+		return pageView;
+	}
+	
+	/**
+	 * 概况统计
+	 * 
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("summary")
+	public String summary(Model model) throws Exception {
+		model.addAttribute("res", findByRes());
+		return Common.BACKGROUND_PATH + "/system/dispCard/summary";
+	}
+	
+	/**
+	 *  概况统计
+	 * 
+	 * @param pageNow
+	 * @param pageSize
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping("findSummaryData")
+	public PageView findSummaryData(String pageNow, String pageSize)
+			throws Exception {
+
+		SummaryInfoMap summaryInfoMap = getFormMap(SummaryInfoMap.class);
+		summaryInfoMap = toFormMap(summaryInfoMap, pageNow, pageSize);
+		// 用户权限
+		summaryInfoMap.put(SysConsts.ROLE_KEY,
+				Common.findAttrValue(SysConsts.ROLE_KEY));
+		// 用户所属站的编号
+		summaryInfoMap.put(SysConsts.ORG_CODE,
+				Common.findAttrValue(SysConsts.ORG_CODE));
+		
+		pageView.setRecords(SummaryInfoMap.mapper().findSummaryData(summaryInfoMap));
 
 		return pageView;
 	}
