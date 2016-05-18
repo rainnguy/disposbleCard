@@ -20,9 +20,13 @@
 			t1.issuedDate as issuedDate
 		from
 			disp_card t1,
-			sys_orga t2
+			sys_orga t2,
+			sys_constant t3
 		where
 			t1.issuedStation = t2.orgCode
+			and t1.status = '1'
+			and t3.kind = '11'
+			and t1.status = t3.constantValue
 			<choose>
 			<when test="orgName != null and orgName != ''">
 				and t2.orgName like '%${orgName}%'
@@ -42,7 +46,91 @@
 			<if test="endDate != null and endDate != ''">
 				and t1.issuedDate &lt;= '${endDate}'
 			</if>
-		order by t1.issuedDate,t1.code
+		order by t1.issuedDate desc, t1.code
+	</select>
+	
+	<select id="findUsedData" resultType="com.banxian.entity.dispCard.UsedInfoMap">
+		select
+			t1.code as code,
+			t1.value as value,
+			t2.orgName as issuedStaName,
+			t4.orgName as usedStaName,
+			DATE_FORMAT(t1.usedTime,'%Y-%m-%d %H:%i:%s') AS usedTime
+		from
+			disp_card t1,
+			sys_orga t2,
+			sys_constant t3,
+			sys_orga t4
+		where
+			t1.issuedStation = t2.orgCode
+			and t1.usedStation = t4.orgCode
+			and t1.status = '2'
+			and t1.status = t3.constantValue
+			and t3.kind = '11'
+			<choose>
+			<when test="issuedStaName != null and issuedStaName != ''">
+				and t2.orgName like '%${issuedStaName}%'
+			</when>
+			<otherwise>
+				<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
+					and t1.issuedStation = '${orgCode}'
+				</if>
+			</otherwise>
+			</choose>
+			<if test="usedStaName != null and usedStaName != ''">
+				and t4.orgName like '%${usedStaName}%'
+			</if>
+			<if test="money != null and money != ''">
+				and t1.value = '${money}'
+			</if>
+			<if test="startDate != null and startDate != ''">
+				and t1.usedTime &gt;= '${startDate}'
+			</if>
+			<if test="endDate != null and endDate != ''">
+				and t1.usedTime &lt;= '${endDate}'
+			</if>
+		order by t1.usedTime desc, t1.code
+	</select>
+	
+	<select id="findUnusedData" resultType="com.banxian.entity.dispCard.UnusedInfoMap">
+		select
+			t1.code as code,
+			t1.value as value,
+			t2.orgName as issuedStaName,
+			t1.issuedDate as issuedDate,
+			t1.indate as indate
+		from
+			disp_card t1,
+			sys_orga t2,
+			sys_constant t3
+		where
+			t1.issuedStation = t2.orgCode
+			and t1.status = '3'
+			and t3.kind = '11'
+			and t1.status = t3.constantValue
+			<choose>
+			<when test="orgName != null and orgName != ''">
+				and t2.orgName like '%${orgName}%'
+			</when>
+			<otherwise>
+				<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
+					and t1.issuedStation = '${orgCode}'
+				</if>
+			</otherwise>
+			</choose>
+			<if test="money != null and money != ''">
+				and t1.value = '${money}'
+			</if>
+			<if test="startDate != null and startDate != ''">
+				and t1.issuedDate &gt;= '${startDate}'
+			</if>
+			<if test="endDate != null and endDate != ''">
+				and t1.issuedDate &lt;= '${endDate}'
+			</if>
+			<if test="inDate != null and inDate != ''">
+				and t1.indate &lt;= '${inDate}'
+			</if>
+		order by t1.indate, t1.code
 	</select>
 	
 </mapper>
