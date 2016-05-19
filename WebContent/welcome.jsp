@@ -1,27 +1,40 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
 	<header class="header bg-white b-b b-light">
-		<p>
-			<big>首页</big>&nbsp;&nbsp;<small>礼品卡消费</small>
-		</p>
+			<h2>欢迎光临礼品卡消费系统</h2>
 	</header>
 <body>
-	<form id="form" name="form" class="form-horizontal" method="post"
-		action="${ctx}/disposableCard/pay.sxml">
-		<div class="form-group">
-			<label class="col-sm-3 control-label">卡号：</label>
-			<div class="col-sm-9">
-				<input type="text" class="form-control" placeholder="请输入卡号"
-					name="payInfoMap.code" id="code">
+<section class="panel panel-default">
+		<div class="row wrapper">
+			<div class="col-sm-3">
+				<div class="input-group">
+					<input type="text" class="input-sm form-control"
+						placeholder="卡号"> <span class="input-group-btn">
+						<button class="btn btn-sm btn-default" type="button">Go!</button>
+					</span>
+				</div>
+			</div>
+			<div class="col-sm-5 m-b-xs">
+				<button class="btn btn-sm btn-default">消费</button>
 			</div>
 		</div>
-		<button type="submit" class="btn btn-success btn-s-xs">付款</button>
-	</form>
-	<form id="form2" name="form2" class="form-horizontal" method="post"
-		action="${ctx}/disposableCard/issue.sxml">
-		<button type="submit" class="btn btn-success btn-s-xs">发卡</button>
-	</form>
+		
+		<div class="table-responsive">
+			<table class="table table-striped b-t b-light">
+				<thead>
+					<tr>
+						<th width="20"><input type="checkbox"></th>
+						<th>Task</th>
+						<th>Task</th>
+						<th>Date</th>
+						<th ></th>
+					</tr>
+				</thead>
+				<tbody>
+					
+				</tbody>
+			</table>
+		</div>
+	</section>
 </body>
 </html>

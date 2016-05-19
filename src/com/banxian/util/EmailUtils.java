@@ -1,6 +1,5 @@
 package com.banxian.util;
 
-import java.io.InputStream;
 import java.util.Date;
 import java.util.Properties;
 
@@ -12,7 +11,6 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import com.banxian.task.SpringTaskController;
 
 
 
@@ -26,8 +24,8 @@ public class EmailUtils {
 
 	public static void main(String[] args) throws Exception {
 		Properties prop = new Properties();
-		InputStream in = SpringTaskController.class.getResourceAsStream("/config.properties");
-		prop.load(in);
+//		InputStream in = SpringTaskController.class.getResourceAsStream("/config.properties");
+//		prop.load(in);
 		EmailUtils.sendMail(prop.getProperty("fromEmail"), prop.getProperty("toEmail"), prop.getProperty("emailName"), prop.getProperty("emailPassword"), "１１１１１１１１", "１１１１１１１");
 	}
 	/**
