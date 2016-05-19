@@ -41,7 +41,7 @@ $('#s').datetimepicker({
 				<input class="input-medium ui-autocomplete-input" id="inDate" placeholder="有效期" name="unusedInfoMap.inDate">
 			</div>
 			<a href="javascript:void(0)" class="btn btn-default" id="search">查询</a>
-			<a href="javascript:grid.exportData('/monitor/historyInfo.sxml')" class="btn btn-info" id="export">导出excel</a>
+			<a href="javascript:grid.exportData('/cardReport/exportUnusedList.sxml')" class="btn btn-info" id="export">导出excel</a>
 		</form>
 	</div>
 	<header class="panel-heading">

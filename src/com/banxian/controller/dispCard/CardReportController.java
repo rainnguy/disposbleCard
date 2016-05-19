@@ -1,5 +1,13 @@
 package com.banxian.controller.dispCard;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,8 +18,11 @@ import com.banxian.entity.dispCard.IssuedInfoMap;
 import com.banxian.entity.dispCard.SummaryInfoMap;
 import com.banxian.entity.dispCard.UnusedInfoMap;
 import com.banxian.entity.dispCard.UsedInfoMap;
+import com.banxian.mapper.dispCard.CardReportMapper;
 import com.banxian.plugin.PageView;
 import com.banxian.util.Common;
+import com.banxian.util.JsonUtils;
+import com.banxian.util.POIUtils;
 import com.banxian.util.SysConsts;
 
 /**
@@ -23,6 +34,9 @@ import com.banxian.util.SysConsts;
 @RequestMapping("/cardReport/")
 public class CardReportController extends BaseController {
 
+	@Inject
+	private CardReportMapper cardReportMapper;
+	
 	/**
 	 * 未消费报表
 	 * 
@@ -183,4 +197,79 @@ public class CardReportController extends BaseController {
 		return pageView;
 	}
 
+	/**
+	 * 导出发卡报表
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
+	@RequestMapping("/exportIssuedList")
+	public void exportIssuedList(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String fileName = "发卡报表";
+		IssuedInfoMap issuedInfoMap = findHasHMap(IssuedInfoMap.class);
+		String exportData = issuedInfoMap.getStr("exportData");// 列表头的json字符串
+
+		List<Map<String, Object>> listMap = JsonUtils.parseJSONList(exportData);
+
+		List<IssuedInfoMap> lis = cardReportMapper.findIssuedData(issuedInfoMap);
+		POIUtils.exportToExcel(response, listMap, lis, fileName);
+	}
+	
+	/**
+	 * 导出消费报表
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
+	@RequestMapping("/exportUsedList")
+	public void exportUsedList(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String fileName = "消费报表";
+		UsedInfoMap usedInfoMap = findHasHMap(UsedInfoMap.class);
+		String exportData = usedInfoMap.getStr("exportData");// 列表头的json字符串
+
+		List<Map<String, Object>> listMap = JsonUtils.parseJSONList(exportData);
+
+		List<UsedInfoMap> lis = cardReportMapper.findUsedData(usedInfoMap);
+		POIUtils.exportToExcel(response, listMap, lis, fileName);
+	}
+	
+	/**
+	 * 导出未消费报表
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
+	@RequestMapping("/exportUnusedList")
+	public void exportUnusedList(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String fileName = "未消费报表";
+		UnusedInfoMap unusedInfoMap = findHasHMap(UnusedInfoMap.class);
+		String exportData = unusedInfoMap.getStr("exportData");// 列表头的json字符串
+
+		List<Map<String, Object>> listMap = JsonUtils.parseJSONList(exportData);
+
+		List<UnusedInfoMap> lis = cardReportMapper.findUnusedData(unusedInfoMap);
+		POIUtils.exportToExcel(response, listMap, lis, fileName);
+	}
+	
+	/**
+	 * 导出概况统计
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
+	@RequestMapping("/exportSummary")
+	public void exportSummary(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String fileName = "概况统计";
+		SummaryInfoMap summaryInfoMap = findHasHMap(SummaryInfoMap.class);
+		String exportData = summaryInfoMap.getStr("exportData");// 列表头的json字符串
+
+		List<Map<String, Object>> listMap = JsonUtils.parseJSONList(exportData);
+
+		List<SummaryInfoMap> lis = cardReportMapper.findSummaryData(summaryInfoMap);
+		POIUtils.exportToExcel(response, listMap, lis, fileName);
+	}
 }

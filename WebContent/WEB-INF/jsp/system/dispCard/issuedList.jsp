@@ -42,7 +42,7 @@ $('#s').datetimepicker({
 				<input class="input-medium ui-autocomplete-input" id="endDate" placeholder="结束日期" name="issuedInfoMap.endDate">
 			</div>
 			<a href="javascript:void(0)" class="btn btn-default" id="search">查询</a>
-			<a href="javascript:grid.exportData('/monitor/historyInfo.sxml')" class="btn btn-info" id="export">导出excel</a>
+			<a href="javascript:grid.exportData('/cardReport/exportIssuedList.sxml')" class="btn btn-info" id="export">导出excel</a>
 		</form>
 	</div>
 	<header class="panel-heading">
