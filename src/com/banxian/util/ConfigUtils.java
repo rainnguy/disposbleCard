@@ -43,7 +43,7 @@ public class ConfigUtils {
 					pro.getProperty("jdbc.password")); // 2、连接数据库
 			String packageName = "com.banxian.entity";
 			// List<String> classNames = getClassName(packageName);
-			List<String> classNames = ClassUtil.getClassName(packageName, false);
+			List<String> classNames = ClassUtil.getClassName(packageName, true);
 			String tabs = "";
 			if (classNames != null) {
 				for (String className : classNames) {

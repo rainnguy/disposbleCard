@@ -14,7 +14,7 @@
 
     var tb = $("#loadhtml");
 		tb.html(CommnUtil.loadingImg());
-		tb.load(rootPath+"/welcome.jsp");
+		tb.load(rootPath+"/index/indexPage.sxml");
 		$("[nav-n]").each(function () {
 				$(this).bind("click",function(){
 						var nav = $(this).attr("nav-n");
