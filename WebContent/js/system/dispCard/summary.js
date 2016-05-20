@@ -27,7 +27,10 @@ $(function() {
 			colkey : "outDateAmount",
 			name : "过期总金额"
 		} ],
-		jsonUrl : rootPath + '/cardReport/findSummaryData.sxml'
+		jsonUrl : rootPath + '/cardReport/findSummaryData.sxml',
+		records : "summaryData",
+		usePage : false,
+		serNumber : true
 	});
 	$("#search").click("click", function() {// 绑定查询按扭
 		var searchParams = $("#searchForm").serializeJson();// 初始化传参数
