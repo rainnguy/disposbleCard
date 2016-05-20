@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.banxian.mapper.dispCard.DispCardMapper">
+	<!--mybatis ehcache缓存配置 -->
+	<!-- 以下两个<cache>标签二选一,第一个可以输出日志,第二个不输出日志 <cache type="org.mybatis.caches.ehcache.LoggingEhcache" 
+		/> -->
+	<!-- <cache type="org.mybatis.caches.ehcache.EhcacheCache"/> -->
+	<!-- 以下与实体类的中字段一致 -->
+	
+	<sql id="CommonQualification">
+		<!-- common -->>
+	</sql>
+	
+	<select id="findSpecificationData" resultType="com.banxian.entity.dispCard.SpecInfoMap">
+		SELECT
+			t1.code as code,
+			t1.value as value,
+			t2.orgName as issuedStation,
+			t1.issuedDate as issuedDate,
+			t4.orgName as useAbledStation,
+			t1.indate as indate,
+			t3.constantName as status,
+			t5.orgName as usedStation,
+			t1.usedTime as usedTime
+		FROM
+			disp_card t1 left join sys_orga t5 on t1.usedStation = t5.orgCode and t5.delFlag = '0',
+			sys_orga t2,
+			sys_constant t3,
+			sys_orga t4
+		WHERE
+			t1.issuedStation = t2.orgCode
+			and t2.delFlag = '0'
+			and t1.status = t3.constantValue
+			and t3.kind = '11'
+			and t4.orgCode = t1.useAbledStation
+			and t4.delFlag = '0'
+			and t1.delFlag = '0'
+			<choose>
+			<when test="issuedStaName != null and issuedStaName != ''">
+				and t2.orgName like '%${issuedStaName}%'
+			</when>
+			<otherwise>
+				<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
+					and t1.issuedStation = '${orgCode}'
+				</if>
+			</otherwise>
+			</choose>
+			<if test="money != null and money != ''">
+				and t1.value = '${money}'
+			</if>
+			<if test="startDate != null and startDate != ''">
+				and t1.issuedDate &gt;= '${startDate}'
+			</if>
+			<if test="endDate != null and endDate != ''">
+				and t1.issuedDate &lt;= '${endDate}'
+			</if>
+			<if test="inDate != null and inDate != ''">
+				and t1.indate &lt;= '${inDate}'
+			</if>
+			<if test="status != null and status != ''">
+				and t1.status = '${status}'
+			</if>
+		ORDER BY t1.status, t1.code
+	</select>
+	
+	<select id="findIndexPage" resultType="com.banxian.entity.dispCard.DispCardMap">
+		SELECT
+			t1.code as code,
+			t1.value as value,
+			t3.constantName as status,
+			t2.orgName as useAbledStation,
+			t1.issuedDate as issuedDate,
+			t1.indate as indate
+		FROM
+			disp_card t1,
+			sys_orga t2,
+			sys_constant t3
+		WHERE
+			t1.useAbledStation = t2.orgCode
+			and t2.delFlag = '0'
+			and t1.status = t3.constantValue
+			and t3.kind = '11'
+			and t1.delFlag = '0'
+			<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
+				and t1.issuedStation = '%${orgCode}%'
+			</if>
+			<if test="code != null and code != ''">
+				and t1.code = '${code}'
+			</if>
+		ORDER BY t1.status, t1.indate desc, t1.code
+	</select>
+</mapper>

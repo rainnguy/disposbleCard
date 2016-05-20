@@ -1,24 +1,17 @@
 package com.banxian.entity.dispCard;
 
-import com.banxian.annotation.TableSeg;
 import com.banxian.entity.base.FormMap;
 import com.banxian.mapper.dispCard.DispCardMapper;
 import com.banxian.util.SpringIocUtils;
 
-/**
- * user实体表
- */
-@TableSeg(tableName = "disp_card", id = "id")
-public class DispCardMap extends FormMap<String, Object> {
+public class SpecInfoMap extends FormMap<String, Object> {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -4684236790397583904L;
 
 	public static DispCardMapper mapper() {
 		return SpringIocUtils.getBean(DispCardMapper.class);
 	}
 }
-
-

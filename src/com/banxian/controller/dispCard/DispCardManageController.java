@@ -1,16 +1,15 @@
 package com.banxian.controller.dispCard;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.banxian.annotation.SystemLog;
 import com.banxian.controller.index.BaseController;
-import com.banxian.entity.dispCard.DispCardMap;
-import com.banxian.exception.SystemException;
+import com.banxian.entity.dispCard.SpecInfoMap;
+import com.banxian.plugin.PageView;
 import com.banxian.util.Common;
+import com.banxian.util.SysConsts;
 
 /**
  * 礼品卡券管理
@@ -21,6 +20,19 @@ import com.banxian.util.Common;
 @Controller
 @RequestMapping("/disposableCard/")
 public class DispCardManageController extends BaseController {
+	
+	/**
+	 * 礼品卡生成
+	 * 
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("create")
+	public String create(Model model) throws Exception {
+		model.addAttribute("res", findByRes());
+		return Common.BACKGROUND_PATH + "/system/dispCard/create";
+	}
 	
 	/**
 	 * 礼品卡发放
@@ -36,72 +48,42 @@ public class DispCardManageController extends BaseController {
 	}
 	
 	/**
-	 * 礼品卡发放
+	 * 礼品卡一览管理
 	 * 
 	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("manage")
+	public String manage(Model model) throws Exception {
+		model.addAttribute("res", findByRes());
+		return Common.BACKGROUND_PATH + "/system/dispCard/manageCard";
+	}
+	
+	/**
+	 *  礼品卡一览管理
+	 * 
+	 * @param pageNow
+	 * @param pageSize
 	 * @return
 	 * @throws Exception
 	 */
 	@ResponseBody
-	@RequestMapping("issueImpl")
-	@SystemLog(module="礼品卡管理",methods="礼品卡发放")//凡需要处理业务逻辑的.都需要记录操作日志
-	@Transactional(readOnly=false)
-	public String issueImpl(Model model) throws Exception {
-		
-		DispCardMap dispCardMap = getFormMap(DispCardMap.class);
-		dispCardMap.save();
-		
-		return "success";
-	}
-	
-	
-	/**
-	 * 礼品卡消费
-	 * 
-	 * @param model
-	 * @return
-	 * @throws Exception
-	 */
-	@ResponseBody
-	@RequestMapping("pay")
-	@Transactional(readOnly=false)
-	@SystemLog(module="礼品卡管理",methods="礼品卡消费")//凡需要处理业务逻辑的.都需要记录操作日志
-	public String pay(Model model) throws Exception {
-		DispCardMap dispCardMap = getFormMap(DispCardMap.class);
-		dispCardMap.update();
-		return "success";
-	}
-	
-	/**
-	 * 礼品卡发放页面
-	 * 
-	 * @param model
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping("addUI")
-	public String addUI(Model model) throws Exception {
-		return Common.BACKGROUND_PATH + "/system/user/add";
-	}
+	@RequestMapping("findSpecificationData")
+	public PageView findSpecificationData(String pageNow, String pageSize)
+			throws Exception {
 
-	/**
-	 * 
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping("addEntity")
-	@SystemLog(module="系统管理",methods="用户管理-新增用户")//凡需要处理业务逻辑的.都需要记录操作日志
-	@Transactional(readOnly=false)
-	public String addEntity(){
-		try {
-			DispCardMap dispCardMap = getFormMap(DispCardMap.class);
-//			PasswordHelper passwordHelper = new PasswordHelper();
-//			passwordHelper.encryptPassword(dispCardMap);
-//			fillCommValeu(userFormMap);
-			dispCardMap.save();
-		} catch (Exception e) {
-			throw new SystemException("添加账号异常");
-		}
-		return "success";
+		SpecInfoMap specInfoMap = getFormMap(SpecInfoMap.class);
+		specInfoMap = toFormMap(specInfoMap, pageNow, pageSize);
+		// 用户权限
+		specInfoMap.put(SysConsts.ROLE_KEY,
+				Common.findAttrValue(SysConsts.ROLE_KEY));
+		// 用户所属站的编号
+		specInfoMap.put(SysConsts.ORG_CODE,
+				Common.findAttrValue(SysConsts.ORG_CODE));
+		
+		pageView.setRecords(SpecInfoMap.mapper().findSpecificationData(specInfoMap));
+
+		return pageView;
 	}
 }

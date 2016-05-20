@@ -6,14 +6,15 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.banxian.controller.index.BaseController;
 import com.banxian.entity.dispCard.DispCardMap;
 import com.banxian.mapper.dispCard.DispCardMapper;
+import com.banxian.plugin.PageView;
 import com.banxian.util.Common;
+import com.banxian.util.SysConsts;
 
 /**
  * 礼品卡券管理
@@ -47,13 +48,29 @@ public class BackgroudController extends BaseController {
 		return Common.BACKGROUND_PATH + "/system/dispCard/index";
 	}
 	
+	/**
+	 * 初始信息
+	 * 
+	 * @param pageNow
+	 * @param pageSize
+	 * @return
+	 * @throws Exception
+	 */
 	@ResponseBody
 	@RequestMapping("indexInfo")
-	public String indexInfo(ModelMap model) throws Exception {
+	public PageView indexInfo(String pageNow, String pageSize) throws Exception {
+
 		DispCardMap dispCardMap = getFormMap(DispCardMap.class);
+		dispCardMap = toFormMap(dispCardMap, pageNow, pageSize);
+		// 用户权限
+		dispCardMap.put(SysConsts.ROLE_KEY,
+				Common.findAttrValue(SysConsts.ROLE_KEY));
+		// 用户所属站的编号
+		dispCardMap.put(SysConsts.ORG_CODE,
+				Common.findAttrValue(SysConsts.ORG_CODE));
 		
-		
-		
-		return "success";
+		pageView.setRecords(DispCardMap.mapper().findIndexPage(dispCardMap));
+
+		return pageView;
 	}
 }
