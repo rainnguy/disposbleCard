@@ -173,12 +173,31 @@ public class CardReportController extends BaseController {
 		// 设置默认的空值
 		orgCodeMap.put("", "");
 		@SuppressWarnings("unchecked")
-		List<Map<String, Object>> stationMap =  (List<Map<String, Object>>) EhcacheUtils.get(SysConsts.SYS_ORGA_DATA);//
-		for(Map<String, Object> map : stationMap){
-			String orgName = (String) map.get("orgName");
-			String orgNum = (String) map.get("orgCode");
-			orgCodeMap.put(orgNum, orgName);
+		// 获取所有的站点
+		List<Map<String, Object>> stationMap =  (List<Map<String, Object>>) EhcacheUtils.get(SysConsts.SYS_ORGA_DATA);
+
+		// 用户权限
+		String roleKey=Common.findAttrValue(SysConsts.ROLE_KEY);
+		if("admin".equals(roleKey)){
+			for(Map<String, Object> map : stationMap){
+				String orgName = (String) map.get("orgName");
+				String orgNum = (String) map.get("orgCode");
+				orgCodeMap.put(orgNum, orgName);
+			}
+		}else{
+			for(Map<String, Object> map : stationMap){
+				// 用户所属站的编号
+				String selfOrgCode=Common.findAttrValue(SysConsts.ORG_CODE);
+				//  当前记录的编号
+				String orgNum = (String) map.get("orgCode");
+				if(selfOrgCode.equals(orgNum)){
+					// 当前记录的名称
+					String orgName = (String) map.get("orgName");
+					orgCodeMap.put(orgNum, orgName);
+				}
+			}
 		}
+		
 		model.addAttribute("orgValue", orgCodeMap);
 		
 		return Common.BACKGROUND_PATH + "/system/dispCard/summary";
