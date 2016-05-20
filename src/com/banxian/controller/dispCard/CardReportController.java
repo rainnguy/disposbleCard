@@ -1,6 +1,7 @@
 package com.banxian.controller.dispCard;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ import com.banxian.entity.dispCard.UsedInfoMap;
 import com.banxian.mapper.dispCard.CardReportMapper;
 import com.banxian.plugin.PageView;
 import com.banxian.util.Common;
+import com.banxian.util.EhcacheUtils;
 import com.banxian.util.JsonUtils;
 import com.banxian.util.POIUtils;
 import com.banxian.util.SysConsts;
@@ -167,6 +169,16 @@ public class CardReportController extends BaseController {
 	@RequestMapping("summary")
 	public String summary(Model model) throws Exception {
 		model.addAttribute("res", findByRes());
+		Map<String, String> orgCodeMap = new HashMap<String, String>();
+		@SuppressWarnings("unchecked")
+		List<Map<String, Object>> stationMap =  (List<Map<String, Object>>) EhcacheUtils.get(SysConsts.SYS_ORGA_DATA);//
+		for(Map<String, Object> map : stationMap){
+			String orgName = (String) map.get("orgName");
+			String orgCode = (String) map.get("orgCode");
+			orgCodeMap.put(orgCode, orgName);
+		}
+		model.addAttribute("orgValue", orgCodeMap);
+		
 		return Common.BACKGROUND_PATH + "/system/dispCard/summary";
 	}
 	
@@ -180,17 +192,13 @@ public class CardReportController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping("findSummaryData")
-	public PageView findSummaryData(String pageNow, String pageSize)
-			throws Exception {
+	public PageView findSummaryData(String pageNow, String pageSize) throws Exception {
 
 		SummaryInfoMap summaryInfoMap = getFormMap(SummaryInfoMap.class);
+		
 		summaryInfoMap = toFormMap(summaryInfoMap, pageNow, pageSize);
 		// 用户权限
-		summaryInfoMap.put(SysConsts.ROLE_KEY,
-				Common.findAttrValue(SysConsts.ROLE_KEY));
-		// 用户所属站的编号
-		summaryInfoMap.put(SysConsts.ORG_CODE,
-				Common.findAttrValue(SysConsts.ORG_CODE));
+		summaryInfoMap.put(SysConsts.ROLE_KEY, Common.findAttrValue(SysConsts.ROLE_KEY));
 		
 		pageView.setRecords(SummaryInfoMap.mapper().findSummaryData(summaryInfoMap));
 
