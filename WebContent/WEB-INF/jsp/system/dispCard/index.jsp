@@ -14,16 +14,16 @@
 	<section class="panel panel-default">
 		<form id="cardIndexform" name="cardIndexform" class="form-vertical" action="${pageContext.servletContext.contextPath }/index/indexInfo.sxml" method="post">
 			<div class="row wrapper">
-				<div class="col-sm-3">
+				<div class="col-sm-2">
 					<div class="input-group">
 						<input type="text" class="input-sm form-control" name="dispCardMap.code"
-							placeholder="卡号"> <span class="input-group-btn">
-							<a href="javascript:void(0)" class="btn btn-default" id="check">确认信息</a>
-						</span>
+							placeholder="卡号">
 					</div>
 				</div>
-				<div class="col-sm-5 m-b-xs">
-					<button class="btn btn-sm btn-default">消费</button>
+				<div class="col-sm-3 m-b-xs">
+					<input type="button" class="btn btn-sm btn-default" id="cardSearch" value="确认"/>
+					<input type="button" class="btn btn-sm btn-default" id="cardConsume" value="消费"/>
+					<input type="button" class="btn btn-sm btn-default" id="cardSold" value="发卡"/>
 				</div>
 			</div>
 		</form>

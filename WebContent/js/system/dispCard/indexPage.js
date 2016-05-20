@@ -25,24 +25,26 @@ $(function() {
 		jsonUrl : rootPath + '/index/indexInfo.sxml',
 		checkbox : true
 	});
-	$("#check").click("click", function() {// 绑定查询按扭
+	$("#cardSearch").click("click", function() {// 绑定查询按扭
 		var searchParams = $("#cardIndexform").serializeJson();// 初始化传参数
 		grid.setOptions({
 			data : searchParams
 		});
 	});
-//	$("#addAccount").click("click", function() {
-//		addAccount();
-//	});
-//	$("#editAccount").click("click", function() {
-//		editAccount();
-//	});
-//	$("#delAccount").click("click", function() {
-//		delAccount();
-//	});
-//	$("#permissions").click("click", function() {
-//		permissions();
-//	});
+	
+	$("#cardConsume").click("click", function() {
+		var cbox = grid.getSelectedCheckbox();
+		if (cbox == "") {
+			layer.msg("请选其中一项！！");
+			return;
+		}
+		
+	});
+	
+	$("#cardSold").click("click", function() {
+		soldCard();
+	});
+	
 });
 
 function editAccount() {
@@ -59,12 +61,12 @@ function editAccount() {
 	});
 }
 
-function addAccount() {
+function soldCard() {
 	pageii = layer.open({
-		title : "新增",
+		title : "售卡",
 		type : 2,
 		area : [ "600px", "80%" ],
-		content : rootPath + '/user/addUI.sxml'
+		content : rootPath + '/index/soldCard.sxml'
 	});
 }
 function delAccount() {
