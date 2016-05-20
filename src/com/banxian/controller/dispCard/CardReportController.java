@@ -170,12 +170,14 @@ public class CardReportController extends BaseController {
 	public String summary(Model model) throws Exception {
 		model.addAttribute("res", findByRes());
 		Map<String, String> orgCodeMap = new HashMap<String, String>();
+		// 设置默认的空值
+		orgCodeMap.put("", "");
 		@SuppressWarnings("unchecked")
 		List<Map<String, Object>> stationMap =  (List<Map<String, Object>>) EhcacheUtils.get(SysConsts.SYS_ORGA_DATA);//
 		for(Map<String, Object> map : stationMap){
 			String orgName = (String) map.get("orgName");
-			String orgCode = (String) map.get("orgCode");
-			orgCodeMap.put(orgCode, orgName);
+			String orgNum = (String) map.get("orgCode");
+			orgCodeMap.put(orgNum, orgName);
 		}
 		model.addAttribute("orgValue", orgCodeMap);
 		
@@ -199,6 +201,8 @@ public class CardReportController extends BaseController {
 		summaryInfoMap = toFormMap(summaryInfoMap, pageNow, pageSize);
 		// 用户权限
 		summaryInfoMap.put(SysConsts.ROLE_KEY, Common.findAttrValue(SysConsts.ROLE_KEY));
+		// 用户所属站的编号
+		summaryInfoMap.put(SysConsts.ORG_CODE, Common.findAttrValue(SysConsts.ORG_CODE));
 		
 		pageView.setRecords(SummaryInfoMap.mapper().findSummaryData(summaryInfoMap));
 

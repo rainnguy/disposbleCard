@@ -30,7 +30,7 @@ $('#endDate').datetimepicker({
 			<div class="form-group">
 				<label class="control-label">
 				<span class="h4 font-thin v-middle">站点:</span></label>
-				<select id="orgName"  class="input-large" name="SummaryInfoMap.orgCode">
+				<select id="orgName"  class="input-large" name="summaryInfoMap.orgNum">
 					<c:forEach items="${orgValue}" var="map">
 						<option value="${map.key}">${map.value}</option>
 					</c:forEach>

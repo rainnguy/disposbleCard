@@ -48,8 +48,8 @@
 			and status = constantValue
 			and kind = '11'
 		<choose>
-			<when test="orgName != null and orgName != ''">
-				and orgName like '%${orgName}%'
+			<when test="orgNum != null and orgNum != ''">
+				and issuedStation = '${orgNum}'
 			</when>
 			<otherwise>
 				<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">

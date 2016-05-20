@@ -27,9 +27,7 @@ $(function() {
 			colkey : "outDateAmount",
 			name : "过期总金额"
 		} ],
-		jsonUrl : rootPath + '/cardReport/findSummaryData.sxml',
-		// checkbox : true,
-		serNumber : true
+		jsonUrl : rootPath + '/cardReport/findSummaryData.sxml'
 	});
 	$("#search").click("click", function() {// 绑定查询按扭
 		var searchParams = $("#searchForm").serializeJson();// 初始化传参数
