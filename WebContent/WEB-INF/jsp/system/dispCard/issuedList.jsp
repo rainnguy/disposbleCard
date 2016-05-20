@@ -13,27 +13,29 @@
 </style>
 <script type="text/javascript">
 $('#startDate').datetimepicker({
+	lang:'ch',
+	timepicker:false,
+	format:'Y-m-d'
 });
 
-$('#endDate').datetimepicker();
-
-$('#s').datetimepicker({
-    lang:"ch",           //语言选择中文
-    format:"Y-m-d",      //格式化日期
-    timepicker:false    //关闭时间选项
+$('#endDate').datetimepicker({
+	lang:'ch',
+	timepicker:false,
+	format:'Y-m-d'
 });
+
 </script>
 	<div class="m-b-md"> 
 		<form class="form-inline" role="form" id="searchForm" name="searchForm">
 			<div class="form-group">
 				<label class="control-label"> <span
-					class="h4 font-thin v-middle">发卡站:</span></label>
+					class="h4 font-thin v-middle">发卡站点:</span></label>
 				<input class="input-medium ui-autocomplete-input" id="orgName"
 					name="issuedInfoMap.orgName">
 			</div>
 			<div class="form-group">
 				<label class="control-label"> <span
-					class="h4 font-thin v-middle">面值:</span></label>
+					class="h4 font-thin v-middle">金额:</span></label>
 				<input class="input-medium ui-autocomplete-input" id="money"
 					name="issuedInfoMap.money">
 			</div>

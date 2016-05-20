@@ -7,10 +7,10 @@ $(function() {
 			name : "卡号"
 		}, {
 			colkey : "value",
-			name : "面值"
+			name : "金额"
 		}, {
 			colkey : "orgName",
-			name : "发卡的站"
+			name : "发卡站点"
 		}, {
 			colkey : "issuedDate",
 			name : "发卡日期",

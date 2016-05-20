@@ -7,13 +7,13 @@ $(function() {
 			name : "卡号"
 		}, {
 			colkey : "value",
-			name : "面值"
+			name : "金额"
 		}, {
 			colkey : "issuedStaName",
-			name : "发卡的站"
+			name : "发卡站点"
 		}, {
 			colkey : "usedStaName",
-			name : "消费的站"
+			name : "消费站点"
 		}, {
 			colkey : "usedTime",
 			name : "消费时间"

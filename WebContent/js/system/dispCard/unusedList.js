@@ -7,16 +7,16 @@ $(function() {
 			name : "卡号"
 		}, {
 			colkey : "value",
-			name : "面值"
+			name : "金额"
 		}, {
 			colkey : "issuedStaName",
-			name : "发卡的站"
+			name : "发卡站点"
 		}, {
 			colkey : "issuedDate",
 			name : "发卡日期"
 		}, {
 			colkey : "indate",
-			name : "有效期"
+			name : "截止日期"
 		} ],
 		jsonUrl : rootPath + '/cardReport/findUnusedData.sxml',
 		// checkbox : true,

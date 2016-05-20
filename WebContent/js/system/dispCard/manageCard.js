@@ -7,25 +7,25 @@ $(function() {
 			name : "卡号"
 		}, {
 			colkey : "value",
-			name : "面值"
+			name : "金额"
 		}, {
 			colkey : "issuedStation",
-			name : "发卡的站"
+			name : "发卡站点"
 		}, {
 			colkey : "issuedDate",
 			name : "发卡日期"
 		}, {
 			colkey : "useAbledStation",
-			name : "可使用的站"
+			name : "限制站点"
 		}, {
 			colkey : "indate",
-			name : "有效期"
+			name : "截止日期"
 		}, {
 			colkey : "status",
 			name : "状态"
 		}, {
 			colkey : "usedStation",
-			name : "消费的站"
+			name : "消费站点"
 		}, {
 			colkey : "usedTime",
 			name : "消费时间"
