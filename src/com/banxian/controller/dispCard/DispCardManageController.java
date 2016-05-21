@@ -35,19 +35,6 @@ public class DispCardManageController extends BaseController {
 	}
 	
 	/**
-	 * 礼品卡发放
-	 * 
-	 * @param model
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping("issue")
-	public String issue(Model model) throws Exception {
-		model.addAttribute("res", findByRes());
-		return Common.BACKGROUND_PATH + "/system/dispCard/issue";
-	}
-	
-	/**
 	 * 礼品卡一览管理
 	 * 
 	 * @param model

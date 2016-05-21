@@ -12,7 +12,7 @@
 	</div>
 <body>
 	<section class="panel panel-default">
-		<form id="cardIndexform" name="cardIndexform" class="form-vertical" action="${pageContext.servletContext.contextPath }/index/indexInfo.sxml" method="post">
+		<form id="cardIndexform" name="cardIndexform" class="form-vertical" action="${pageContext.servletContext.contextPath }/index/consumeCard.sxml" method="post">
 			<div class="row wrapper">
 				<div class="col-sm-2">
 					<div class="input-group">
@@ -32,8 +32,5 @@
 		<div id="paging" class="pagclass"></div>
 	</div>
 	
-	<div class="table-responsive">
-		<div id="paging2" class="pagclass"></div>
-	</div>
 </body>
 </html>

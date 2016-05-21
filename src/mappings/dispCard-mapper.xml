@@ -33,9 +33,16 @@
 			and t2.delFlag = '0'
 			and t1.status = t3.constantValue
 			and t3.kind = '11'
-			and t4.orgCode = t1.useAbledStation
 			and t4.delFlag = '0'
 			and t1.delFlag = '0'
+			<choose>
+			<when test="status != null and status != ''">
+				and t1.status = '${status}'
+			</when>
+			<otherwise>
+				and (t1.status = '3' or t4.orgCode = t1.useAbledStation)
+			</otherwise>
+			</choose>
 			<choose>
 			<when test="issuedStaName != null and issuedStaName != ''">
 				and t2.orgName like '%${issuedStaName}%'
@@ -46,6 +53,9 @@
 				</if>
 			</otherwise>
 			</choose>
+			<if test="code != null and code != ''">
+				and t1.code = '${code}'
+			</if>
 			<if test="money != null and money != ''">
 				and t1.value = '${money}'
 			</if>
@@ -58,14 +68,12 @@
 			<if test="inDate != null and inDate != ''">
 				and t1.indate &lt;= '${inDate}'
 			</if>
-			<if test="status != null and status != ''">
-				and t1.status = '${status}'
-			</if>
 		ORDER BY t1.status, t1.code
 	</select>
 	
 	<select id="findIndexPage" resultType="com.banxian.entity.dispCard.DispCardMap">
 		SELECT
+			t1.id as id,
 			t1.code as code,
 			t1.value as value,
 			t3.constantName as status,
@@ -90,4 +98,57 @@
 			</if>
 		ORDER BY t1.status, t1.indate desc, t1.code
 	</select>
+	
+	<update id="consumeCard" parameterType="com.banxian.entity.dispCard.ConsumeCardInfoMap">
+		UPDATE
+			disp_card
+		SET
+			status = '2',
+			usedStation = '${orgCode}',
+			usedTime = '${nowDate}',
+			operCode = '${operCode}',
+			updateTime = '${nowDate}'
+		WHERE
+			code = '${code}'
+			and value = '${value}'
+			and status = '1'
+			and indate &gt;= '${nowDate}'
+			and delFlag = '0'
+			<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
+				and useAbledStation like '%${orgCode}%'
+			</if>
+	</update>
+	
+	<select id="findByCardId" resultType="com.banxian.entity.dispCard.ConsumeCardInfoMap">
+		select
+			id,
+			code,
+			value,
+			status,
+			indate,
+			useAbledStation
+		from
+			disp_card
+		where
+			id = '${cardId}'
+	</select>
+	
+	<update id="issueCard" parameterType="com.banxian.entity.dispCard.DispCardMap">
+		UPDATE
+			disp_card
+		SET
+			status = '1',
+			indate = '${nextYearDate}',
+			useAbledStation = '${useAbledStation}',
+			operCode = '${operCode}',
+			remark = '${description}',
+			updateTime = '${nowDate}'
+		WHERE
+			code = '${code}'
+			and status = '3'
+			and delFlag = '0'
+			<if test="value != null and value != ''">
+				and value = '${value}'
+			</if>
+	</update>
 </mapper>

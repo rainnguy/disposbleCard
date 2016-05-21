@@ -4,6 +4,10 @@ $(function() {
 	grid = lyGrid({
 		pagId : 'paging',
 		l_column : [{
+			colkey : "id",
+			name : "id",
+			hide : true
+		},{
 			colkey : "code",
 			name : "卡号"
 		}, {
@@ -25,6 +29,8 @@ $(function() {
 		jsonUrl : rootPath + '/index/indexInfo.sxml',
 		checkbox : true
 	});
+	
+	// 确认按钮
 	$("#cardSearch").click("click", function() {// 绑定查询按扭
 		var searchParams = $("#cardIndexform").serializeJson();// 初始化传参数
 		grid.setOptions({
@@ -32,60 +38,48 @@ $(function() {
 		});
 	});
 	
+	// 消费按钮
 	$("#cardConsume").click("click", function() {
-		var cbox = grid.getSelectedCheckbox();
-		if (cbox == "") {
-			layer.msg("请选其中一项！！");
-			return;
-		}
-		
+		consumeCard();
 	});
 	
+	// 发卡按钮
 	$("#cardSold").click("click", function() {
 		soldCard();
 	});
 	
 });
 
-function editAccount() {
+// 消费
+function consumeCard() {
 	var cbox = grid.getSelectedCheckbox();
 	if (cbox.length > 1 || cbox == "") {
-		layer.msg("只能选中一个");
+		layer.msg("请选其中一项！！");
 		return;
 	}
-	pageii = layer.open({
-		title : "编辑",
-		type : 2,
-		area : [ "600px", "80%" ],
-		content : rootPath + '/user/editUI.sxml?userId=' + cbox
-	});
+	var url = rootPath + '/index/consumeCard.sxml';
+	var s = CommnUtil.ajax(url, {
+		cardId : cbox.toString(),
+	}, "json");
+	if (s == "success") {
+		layer.msg('消费成功');
+		grid.loadData();
+	} else if (s == "updates0") {
+		layer.msg('消费失败');
+	} else if (s == "cannot") {
+		layer.msg('该卡无法消费');
+	} else {
+		layer.msg('消费异常');
+	}
 }
 
+// 发卡
 function soldCard() {
 	pageii = layer.open({
-		title : "售卡",
+		title : "发卡",
 		type : 2,
 		area : [ "600px", "80%" ],
 		content : rootPath + '/index/soldCard.sxml'
-	});
-}
-function delAccount() {
-	var cbox = grid.getSelectedCheckbox();
-	if (cbox == "") {
-		layer.msg("请选择删除项！！");
-		return;
-	}
-	layer.confirm('是否删除？', function(index) {
-		var url = rootPath + '/user/deleteEntity.sxml';
-		var s = CommnUtil.ajax(url, {
-			ids : cbox.join(",")
-		}, "json");
-		if (s == "success") {
-			layer.msg('删除成功');
-			grid.loadData();
-		} else {
-			layer.msg('删除失败');
-		}
 	});
 }
 	

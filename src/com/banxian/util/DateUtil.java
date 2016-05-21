@@ -194,7 +194,7 @@ public class DateUtil {
 	 * 
 	 * @param date
 	 *            日期
-	 * @return 返回字符型日期 yyyy/MM/dd 格式
+	 * @return 返回字符型日期 yyyy-MM-dd 格式
 	 */
 	public static String getCurrDate() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -311,6 +311,21 @@ public class DateUtil {
 			}
 		}
 		return result;
+	}
+	
+	/**
+	 * 功能描述：取得指定日期的下一年的日期
+	 * 
+	 * @param strdate
+	 *            String 字符型日期
+	 * @return String 日期字符串 yyyy-MM-dd格式
+	 */
+	public static String getNextYearDate(String strdate) {
+		date = parseDate(strdate);
+		calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.YEAR, 1);
+		return formatDate(calendar.getTime());
 	}
 
 	public static void main(String[] args) {

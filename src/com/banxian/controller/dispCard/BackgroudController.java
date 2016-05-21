@@ -7,15 +7,20 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.banxian.annotation.SystemLog;
 import com.banxian.controller.index.BaseController;
+import com.banxian.entity.dispCard.ConsumeCardInfoMap;
 import com.banxian.entity.dispCard.DispCardMap;
+import com.banxian.exception.SystemException;
 import com.banxian.mapper.dispCard.DispCardMapper;
 import com.banxian.plugin.PageView;
 import com.banxian.util.Common;
+import com.banxian.util.DateUtil;
 import com.banxian.util.EhcacheUtils;
 import com.banxian.util.SysConsts;
 
@@ -75,25 +80,143 @@ public class BackgroudController extends BaseController {
 		return pageView;
 	}
 	
+	/**
+	 * 消费处理
+	 * 
+	 * @param txtGroupsSelect
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("consumeCard")
+	@SystemLog(module="礼品卡管理",methods="礼品卡管理-消费")//凡需要处理业务逻辑的.都需要记录操作日志
+	@Transactional(readOnly=false)
+	public String consumeCard(String cardId){
+		
+		ConsumeCardInfoMap conCardInfoMap = getFormMap(ConsumeCardInfoMap.class);
+		conCardInfoMap.put("cardId", cardId);
+		// 获取该卡的信息
+		conCardInfoMap = ConsumeCardInfoMap.mapper().findByCardId(conCardInfoMap);
+		
+		// 当前卡的状态
+		String status = conCardInfoMap.get("status").toString();
+		// 当前卡的有效期
+		String indate = conCardInfoMap.get("indate").toString();
+		// 当前系统时间
+		String nowdate = DateUtil.getCurrDate();
+		if(!"1".equals(status) || 0 < nowdate.compareTo(indate)){
+			return "cannot";
+		}
+		
+		// 卡号
+		conCardInfoMap.put("code", conCardInfoMap.get("code").toString());
+		// 金额
+		conCardInfoMap.put("value", conCardInfoMap.get("value").toString());
+		// 用户权限
+		conCardInfoMap.put(SysConsts.ROLE_KEY, Common.findAttrValue(SysConsts.ROLE_KEY));
+		// 用户所属站的编号
+		conCardInfoMap.put(SysConsts.ORG_CODE, Common.findAttrValue(SysConsts.ORG_CODE));
+		// 操作编号
+		conCardInfoMap.put(SysConsts.OPER_CODE, Common.findAttrValue(SysConsts.OPER_CODE));
+		// 当前系统时间
+		conCardInfoMap.put("nowDate", nowdate);
+		
+		try {
+			int count = ConsumeCardInfoMap.mapper().consumeCard(conCardInfoMap);
+			if(count == 0){
+				return "updates0";
+			}
+		} catch (Exception e) {
+			throw new SystemException("消费异常");
+		}
+		return "success";
+	}
+	
+	/**
+	 * 发卡
+	 * 
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping("soldCard")
 	public String addUI(Model model) throws Exception {
 		return Common.BACKGROUND_PATH + "/system/dispCard/soldCard";
 	}
 	
+	/**
+	 * 发卡处理
+	 * 
+	 * @param txtGroupsSelect
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("issueCard")
+	@SystemLog(module="礼品卡管理",methods="礼品卡管理-发卡")//凡需要处理业务逻辑的.都需要记录操作日志
+	@Transactional(readOnly=false)
+	public String issueCard(String txtGroupsSelect){
+		
+		DispCardMap dispCardMap = getFormMap(DispCardMap.class);
+		// 限制站点
+		dispCardMap.put("useAbledStation", txtGroupsSelect);
+		
+		// 当前系统时间
+		String nowdate = DateUtil.getCurrDate();
+		// 获取当前日期的下一年日期
+		String nextYearDate = DateUtil.getNextYearDate(nowdate);
+		// 操作编号
+		dispCardMap.put(SysConsts.OPER_CODE, Common.findAttrValue(SysConsts.OPER_CODE));
+		// 当前系统时间
+		dispCardMap.put("nowDate", nowdate);
+		// 截止日期
+		dispCardMap.put("nextYearDate", nextYearDate);
+		
+		try {
+			int count = DispCardMap.mapper().issueCard(dispCardMap);
+			if(count == 0){
+				return "updates0";
+			}
+		} catch (Exception e) {
+			throw new SystemException("发卡异常");
+		}
+		return "success";
+	}
+	
+	/**
+	 * 发卡时供选择的站
+	 * 
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping("stationSelect")
 	public String seletRole(Model model) throws Exception {
 		Map<String, String> orgCodeMap = new HashMap<String, String>();
 		@SuppressWarnings("unchecked")
-		List<Map<String, Object>> stationMap =  (List<Map<String, Object>>) EhcacheUtils.get(SysConsts.SYS_ORGA_DATA);//
-		for(Map<String, Object> map : stationMap){
-			String orgName = (String) map.get("orgName");
-			String orgCode = (String) map.get("orgCode");
-			orgCodeMap.put(orgCode, orgName);
+		List<Map<String, Object>> stationMap =  (List<Map<String, Object>>) EhcacheUtils.get(SysConsts.SYS_ORGA_DATA);
+		
+		// 用户权限
+		String roleKey=Common.findAttrValue(SysConsts.ROLE_KEY);
+		if("admin".equals(roleKey)){
+			for(Map<String, Object> map : stationMap){
+				String orgName = (String) map.get("orgName");
+				String orgNum = (String) map.get("orgCode");
+				orgCodeMap.put(orgNum, orgName);
+			}
+		}else{
+			// 用户所属站的编号
+			String selfOrgCode=Common.findAttrValue(SysConsts.ORG_CODE);
+			for(Map<String, Object> map : stationMap){
+				//  当前记录的编号
+				String orgNum = map.get("orgCode").toString();
+				if(selfOrgCode.equals(orgNum)){
+					// 当前记录的名称
+					String orgName = map.get("orgName").toString();
+					orgCodeMap.put(orgNum, orgName);
+				}
+			}
 		}
 		model.addAttribute("orgValue", orgCodeMap);
 		
 		return Common.BACKGROUND_PATH + "/system/dispCard/stationSelect";
 	}
-	
-	
 }

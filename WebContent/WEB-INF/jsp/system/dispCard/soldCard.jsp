@@ -28,7 +28,7 @@ label[class^="btn btn-default"] {
 <body>
 	<div class="l_err" style="width: 100%; margin-top: 2px;"></div>
 	<form id="form" name="form" class="form-horizontal" method="post"
-		action="${ctx}/user/">
+		action="${ctx}/index/issueCard.sxml">
 		<section class="panel panel-default">
 		<div class="panel-body">
 			<div class="form-group">
@@ -36,16 +36,16 @@ label[class^="btn btn-default"] {
 					<label class="control-label">卡号</label>
 				</div>
 				<div class="col-sm-9">
-					<input type="text" class="form-control"
-						placeholder="请输入卡号" name="dispCardMap.code" id="userName">
+					<input type="text" class="form-control checkacc"
+						placeholder="请输入卡号" name="dispCardMap.code" id="code">
 				</div>
 			</div>
 			<div class="line line-dashed line-lg pull-in"></div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">金额</label>
 				<div class="col-sm-9">
-					<input type="text" class="form-control checkacc"
-						placeholder="请输入金额" name="dispCardMap.value" id="accountName">
+					<input type="text" class="form-control"
+						placeholder="请输入金额" name="dispCardMap.value" id="value">
 				</div>
 			</div>
 			<div class="line line-dashed line-lg pull-in"></div>
@@ -54,13 +54,13 @@ label[class^="btn btn-default"] {
 			<div class="form-group">
 				<label class="col-sm-3 control-label">描述</label>
 				<div class="col-sm-9">
-					<input type="text" class="form-control" placeholder="请输入账号描述"
+					<input type="text" class="form-control" placeholder="请输入描述"
 						name="dispCardMap.description" id="description">
 				</div>
 			</div>
 		</div>
 		<footer class="panel-footer text-right bg-light lter">
-		<button type="submit" class="btn btn-success btn-s-xs">提交</button>
+		<button type="submit" class="btn btn-success btn-s-xs">确认发卡</button>
 		</footer> </section>
 	</form>
 	<script type="text/javascript">

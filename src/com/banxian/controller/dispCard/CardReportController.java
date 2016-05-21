@@ -185,14 +185,14 @@ public class CardReportController extends BaseController {
 				orgCodeMap.put(orgNum, orgName);
 			}
 		}else{
+			// 用户所属站的编号
+			String selfOrgCode=Common.findAttrValue(SysConsts.ORG_CODE);
 			for(Map<String, Object> map : stationMap){
-				// 用户所属站的编号
-				String selfOrgCode=Common.findAttrValue(SysConsts.ORG_CODE);
 				//  当前记录的编号
-				String orgNum = (String) map.get("orgCode");
+				String orgNum = map.get("orgCode").toString();
 				if(selfOrgCode.equals(orgNum)){
 					// 当前记录的名称
-					String orgName = (String) map.get("orgName");
+					String orgName = map.get("orgName").toString();
 					orgCodeMap.put(orgNum, orgName);
 				}
 			}

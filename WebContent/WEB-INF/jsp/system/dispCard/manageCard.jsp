@@ -32,6 +32,12 @@ $('#inDate').datetimepicker({
 		<form class="form-inline" role="form" id="searchForm" name="searchForm">
 			<div class="form-group">
 				<label class="control-label"> <span
+					class="h4 font-thin v-middle">卡号:</span></label>
+				<input class="input-medium ui-autocomplete-input" id="code"
+					name="specInfoMap.code">
+			</div>
+			<div class="form-group">
+				<label class="control-label"> <span
 					class="h4 font-thin v-middle">发卡站点:</span></label>
 				<input class="input-medium ui-autocomplete-input" id="issuedStaName"
 					name="specInfoMap.issuedStaName">

@@ -84,9 +84,9 @@
 			id="groups_tweenbox" cellspacing="0" cellpadding="0">
 			<tbody>
 				<tr>
-					<td>已站点</td>
+					<td>已选择站点</td>
 					<td></td>
-					<td>可站点</td>
+					<td>可选择站点</td>
 				</tr>
 				<tr>
 					<td><select id="selectGroups" multiple="multiple"
