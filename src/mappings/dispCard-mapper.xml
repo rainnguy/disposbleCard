@@ -87,6 +87,7 @@
 		WHERE
 			t1.useAbledStation = t2.orgCode
 			and t2.delFlag = '0'
+			and t1.status = '1'
 			and t1.status = t3.constantValue
 			and t3.kind = '11'
 			and t1.delFlag = '0'
