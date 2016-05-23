@@ -30,7 +30,7 @@ $(function() {
 		jsonUrl : rootPath + '/cardReport/findSummaryData.sxml',
 		records : "summaryData",
 		usePage : false,
-		serNumber : true
+		serNumber : false
 	});
 	$("#search").click("click", function() {// 绑定查询按扭
 		var searchParams = $("#searchForm").serializeJson();// 初始化传参数

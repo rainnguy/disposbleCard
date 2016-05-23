@@ -213,19 +213,18 @@ public class CardReportController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping("findSummaryData")
-	public PageView findSummaryData(String pageNow, String pageSize) throws Exception {
+	public SummaryInfoMap findSummaryData(Model model) throws Exception {
 
 		SummaryInfoMap summaryInfoMap = getFormMap(SummaryInfoMap.class);
-		
-		summaryInfoMap = toFormMap(summaryInfoMap, pageNow, pageSize);
+		SummaryInfoMap resultMap = new SummaryInfoMap();
 		// 用户权限
 		summaryInfoMap.put(SysConsts.ROLE_KEY, Common.findAttrValue(SysConsts.ROLE_KEY));
 		// 用户所属站的编号
 		summaryInfoMap.put(SysConsts.ORG_CODE, Common.findAttrValue(SysConsts.ORG_CODE));
-		
-		pageView.setRecords(SummaryInfoMap.mapper().findSummaryData(summaryInfoMap));
 
-		return pageView;
+		resultMap.put("summaryData", SummaryInfoMap.mapper().findSummaryData(summaryInfoMap));
+		
+		return resultMap;
 	}
 
 	/**
