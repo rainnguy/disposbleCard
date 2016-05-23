@@ -24,25 +24,23 @@
 			t5.orgName as usedStation,
 			t1.usedTime as usedTime
 		FROM
-			disp_card t1 left join sys_orga t5 on t1.usedStation = t5.orgCode and t5.delFlag = '0',
+			disp_card t1 left join sys_orga t5 on
+				t1.usedStation = t5.orgCode
+				and t5.delFlag = '0'
+				left join sys_orga t4 on
+					t4.orgCode = t1.useAbledStation
+					and t4.delFlag = '0',
 			sys_orga t2,
-			sys_constant t3,
-			sys_orga t4
+			sys_constant t3
 		WHERE
 			t1.issuedStation = t2.orgCode
 			and t2.delFlag = '0'
 			and t1.status = t3.constantValue
 			and t3.kind = '11'
-			and t4.delFlag = '0'
 			and t1.delFlag = '0'
-			<choose>
-			<when test="status != null and status != ''">
+			<if test="status != null and status != ''">
 				and t1.status = '${status}'
-			</when>
-			<otherwise>
-				and (t1.status = '3' or t4.orgCode = t1.useAbledStation)
-			</otherwise>
-			</choose>
+			</if>
 			<choose>
 			<when test="issuedStaName != null and issuedStaName != ''">
 				and t2.orgName like '%${issuedStaName}%'
