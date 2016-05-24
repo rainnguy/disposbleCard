@@ -1,38 +1,48 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/system/dispCard/create.js"></script>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/date/jquery.datetimepicker.css"/>
+<script src="${pageContext.request.contextPath}/js/jquery/jquery.datetimepicker.full.min.js"></script>
+<style type="text/css">
+.input::-ms-input-placeholder {
+	text-align: center;
+}
+.input::-webkit-input-placeholder {
+	text-align: center;
+}
+</style>
+<script type="text/javascript">
+$('#startDate').datetimepicker();
+$('#endDate').datetimepicker();
+</script>
 <html>
-	<header class="header bg-white b-b b-light">
-		<h4>礼品卡生成</h4>
-	</header>
+	<div class="doc-buttons">
+	<c:forEach items="${res}" var="key">
+		${key.menuDesc}
+	</c:forEach>
+	</div>
 <body>
-<section class="panel panel-default">
-		<div class="row wrapper">
-			<div class="col-sm-3">
-				<div class="input-group">
-					<input type="text" class="input-sm form-control" placeholder="数量">
-					<input type="text" class="input-sm form-control" placeholder="金额">
-				</div>
+	<section class="panel panel-default">
+		<form id="cardCreateForm" name="cardCreateForm" class="form-inline" 
+			action="${pageContext.servletContext.contextPath }/disposableCard/createCard.sxml" method="post">
+			<div class="form-group">
+				<label class="control-label"> <span
+					class="h5 font-thin v-middle">金额:</span></label>
+				<input class="input-medium ui-autocomplete-input" id="money"
+					name="dispCardMap.money">
 			</div>
-			<div class="col-sm-5 m-b-xs">
-				<button class="btn btn-sm btn-default">生成</button>
+			<div class="form-group">
+				<input class="input-medium ui-autocomplete-input" id="startDate" placeholder="开始时间" name="dispCardMap.startDate" >
+				<input class="input-medium ui-autocomplete-input" id="endDate" placeholder="结束时间" name="dispCardMap.endDate">
 			</div>
-		</div>
-		
-		<div class="table-responsive">
-			<table class="table table-striped b-t b-light">
-				<thead>
-					<tr>
-						<th width="20"><input type="checkbox"></th>
-						<th>Task</th>
-						<th>Task</th>
-						<th>Date</th>
-						<th ></th>
-					</tr>
-				</thead>
-				<tbody>
-					
-				</tbody>
-			</table>
-		</div>
+			<a href="javascript:void(0)" class="btn btn-default" id="cardSearch">查询</a>
+			<a href="javascript:grid.exportData('/disposableCard/exportCreateInfoList.sxml')" class="btn btn-info" id="export">导出excel</a>
+			<input type="button" class="btn btn-sm btn-default" id="cardCreate" value="生成新卡"/>
+		</form>
 	</section>
+	<div class="table-responsive">
+		<div id="paging" class="pagclass"></div>
+	</div>
+	
 </body>
 </html>

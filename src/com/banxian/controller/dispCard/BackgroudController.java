@@ -1,5 +1,6 @@
 package com.banxian.controller.dispCard;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,7 +84,7 @@ public class BackgroudController extends BaseController {
 	/**
 	 * 消费处理
 	 * 
-	 * @param txtGroupsSelect
+	 * @param cardId
 	 * @return
 	 */
 	@ResponseBody
@@ -155,7 +156,17 @@ public class BackgroudController extends BaseController {
 	@Transactional(readOnly=false)
 	public String issueCard(String txtGroupsSelect){
 		
+		// 验证可用站点为空
+		if (txtGroupsSelect == null || "".equals(txtGroupsSelect)) {
+			return "notUsableStation";
+		}
 		DispCardMap dispCardMap = getFormMap(DispCardMap.class);
+		// 验证卡号为空
+		Object code = dispCardMap.get("code");
+		if(code == null || "".equals(code.toString())){
+			return "notCode";
+		}
+		
 		// 限制站点
 		dispCardMap.put("useAbledStation", txtGroupsSelect);
 		
@@ -167,6 +178,8 @@ public class BackgroudController extends BaseController {
 		dispCardMap.put(SysConsts.OPER_CODE, Common.findAttrValue(SysConsts.OPER_CODE));
 		// 当前系统时间
 		dispCardMap.put("nowDate", nowdate);
+		// 当前系统日期
+		dispCardMap.put("issuedDate", DateUtil.getDate(new Date()).replaceAll("/", "-"));
 		// 截止日期
 		dispCardMap.put("nextYearDate", nextYearDate);
 		

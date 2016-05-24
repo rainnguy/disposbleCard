@@ -33,7 +33,8 @@
 			sys_orga t2,
 			sys_constant t3
 		WHERE
-			t1.issuedStation = t2.orgCode
+			((t1.status = '3' and t1.createStation = t2.orgCode)
+			or (t1.status &lt;&gt; '3' and t1.issuedStation = t2.orgCode))
 			and t2.delFlag = '0'
 			and t1.status = t3.constantValue
 			and t3.kind = '11'
@@ -47,7 +48,8 @@
 			</when>
 			<otherwise>
 				<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
-					and t1.issuedStation = '${orgCode}'
+					and ((t1.status = '3' and t1.createStation = '${orgCode}')
+					or (t1.status &lt;&gt; '3' and t1.issuedStation = '${orgCode}'))
 				</if>
 			</otherwise>
 			</choose>
@@ -141,7 +143,8 @@
 			useAbledStation = '${useAbledStation}',
 			operCode = '${operCode}',
 			remark = '${description}',
-			updateTime = '${nowDate}'
+			updateTime = '${nowDate}',
+			issuedDate = '${issuedDate}'
 		WHERE
 			code = '${code}'
 			and status = '3'
@@ -150,4 +153,78 @@
 				and value = '${value}'
 			</if>
 	</update>
+	
+	<select id="findMaxCardId" resultType="String">
+		select
+			max(code) as maxCode
+		from
+			disp_card
+		where
+			status = '3'
+			and updateTime &gt;= '${startTime}'
+			and updateTime &lt;= '${nowdate}'
+	</select>
+	
+	<select id="findCreateCardInfo" resultType="com.banxian.entity.dispCard.DispCardMap">
+		select
+			t1.id as id,
+			t1.code as code,
+			t1.password as password,
+			t1.value as value,
+			t2.orgName as station,
+			DATE_FORMAT(
+			t1.updateTime,
+			'%Y-%m-%d %H:%i:%s'
+			) AS updateTime
+		from
+			disp_card t1,
+			sys_orga t2
+		where
+			t1.createStation = t2.orgCode
+			and t2.delFlag = '0'
+			and t1.delFlag = '0'
+			<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
+				and t1.createStation = '${orgCode}'
+			</if>
+			<if test="money != null and money != ''">
+				and t1.value = '${money}'
+			</if>
+			<choose>
+			<when test="(startDate == null or startDate == '') and (endDate == null or endDate == '')">
+				and DATE_FORMAT(t1.updateTime,'%Y-%m-%d') = '${nowDate}'
+			</when>
+			<otherwise>
+				<if test="startDate != null and startDate != ''">
+					and t1.updateTime &gt;= '${startDate}'
+				</if>
+				<if test="endDate != null and endDate != ''">
+					and t1.updateTime &lt;= '${endDate}'
+				</if>
+			</otherwise>
+			</choose>
+		order by id
+	</select>
+	
+	<insert id="insertNewData" parameterType="com.banxian.entity.dispCard.DispCardMap">
+		insert into disp_card
+		(code,
+		password,
+		value,
+		status,
+		createStation,
+		delFlag,
+		operCode,
+		updateTime
+		)
+		values
+		('${code}',
+		'${password}',
+		'${money}',
+		'3',
+		'${orgCode}',
+		'0',
+		'${operCode}',
+		'${nowDate}'
+		)
+	</insert>
 </mapper>

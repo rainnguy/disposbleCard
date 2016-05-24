@@ -60,7 +60,7 @@ $('#inDate').datetimepicker({
 				<input class="input-medium ui-autocomplete-input" id="inDate" placeholder="截止日期" name="specInfoMap.inDate">
 			</div>
 			<a href="javascript:void(0)" class="btn btn-default" id="search">查询</a>
-			<a href="javascript:grid.exportData('/monitor/historyInfo.sxml')" class="btn btn-info" id="export">导出excel</a>
+			<a href="javascript:grid.exportData('/disposableCard/exportManageInfoList.sxml')" class="btn btn-info" id="export">导出excel</a>
 		</form>
 	</div>
 	<header class="panel-heading">

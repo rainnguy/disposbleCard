@@ -1,8 +1,3 @@
-//单独验证某一个input  class="checkpass"
-jQuery.validator.addMethod("checkacc", function(value, element) {
-	return this.optional(element)
-			|| value.length >= 1;
-}, "请输入卡号");
 $(function() {
 	$("form").validate({
 		submitHandler : function(form) {// 必须写在验证前面，否则无法ajax提交
@@ -19,6 +14,10 @@ $(function() {
 						$("#form")[0].reset();
 					} else if (data == "updates0") {
 						layer.alert('发卡失败,请确认卡号和金额！', 3);
+					} else if (data == "notUsableStation") {
+						layer.alert('请选择可使用的站点！', 3);
+					} else if (data == "notCode") {
+						layer.alert('请输入卡号！', 3);
 					} else {
 						layer.alert('发卡异常！', 3);
 					}

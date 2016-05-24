@@ -194,7 +194,7 @@ public class DateUtil {
 	 * 
 	 * @param date
 	 *            日期
-	 * @return 返回字符型日期 yyyy-MM-dd 格式
+	 * @return 返回字符型日期 yyyy-MM-dd HH:mm:ss格式
 	 */
 	public static String getCurrDate() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -327,7 +327,37 @@ public class DateUtil {
 		calendar.add(Calendar.YEAR, 1);
 		return formatDate(calendar.getTime());
 	}
-
+	
+	/**
+	 * get current date
+	 * 
+	 * @return 返回字符型日期 yyyy-MM-dd格式
+	 */
+	public static String getCurrDate2() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		return dateFormat.format(new Date());
+	}
+	
+	/**
+	 * get current date
+	 * 
+	 * @return 返回字符型日期 yyyyMMdd格式
+	 */
+	public static String getCurrDate3() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+		return dateFormat.format(new Date());
+	}
+	
+	/**
+	 * get the start time of today
+	 * 
+	 * @return 返回字符型日期 yyyy-MM-dd 00:00:00格式
+	 */
+	public static String getStartTime() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		return dateFormat.format(new Date()).concat(" 00:00:00");
+	}
+	
 	public static void main(String[] args) {
 		Date d = new Date();
 		// System.out.println(d.toString());
