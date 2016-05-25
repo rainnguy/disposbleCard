@@ -43,4 +43,48 @@ $(function() {
 			data : searchParams
 		});
 	});
+	// 编辑按钮
+	$("#editAccount").click("click", function() {
+		editAccount();
+	});
+	// 删除按钮
+	$("#delAccount").click("click", function() {
+		delAccount();
+	});
 });
+
+//编辑
+function editAccount() {
+	var cbox = grid.getSelectedCheckbox();
+	if (cbox.length > 1 || cbox == "") {
+		layer.msg("请选中一项");
+		return;
+	}
+	pageii = layer.open({
+		title : "编辑",
+		type : 2,
+		area : [ "600px", "80%" ],
+		content : rootPath + '/disposableCard/editCardPage.sxml?id=' + cbox.toString()
+	});
+}
+
+//删除
+function delAccount() {
+	var cbox = grid.getSelectedCheckbox();
+	if (cbox == "") {
+		layer.msg("请选择删除项！！");
+		return;
+	}
+	layer.confirm('是否删除？', function(index) {
+		var url = rootPath + '/disposableCard/deleteCard.sxml';
+		var s = CommnUtil.ajax(url, {
+			cardId : cbox.toString()
+		}, "json");
+		if (s == "success") {
+			layer.msg('删除成功');
+			grid.loadData();
+		} else {
+			layer.msg('删除失败');
+		}
+	});
+}

@@ -269,6 +269,57 @@ public class DispCardManageController extends BaseController {
 	}
 	
 	/**
+	 * 删除卡
+	 * 
+	 * @param txtGroupsSelect
+	 * @return
+	 * @throws UnsupportedEncodingException 
+	 * @throws NoSuchAlgorithmException 
+	 */
+	@ResponseBody
+	@RequestMapping("deleteCard")
+	@SystemLog(module="礼品卡管理",methods="礼品卡管理-删除卡")//凡需要处理业务逻辑的.都需要记录操作日志
+	@Transactional(readOnly=false)
+	public String deleteCard(String cardId){
+		
+		DispCardMap dispCardMap = getFormMap(DispCardMap.class);
+//		dispCardMap.put(key, value);
+//		dispCardMap.put(key, value);
+		
+		return "success";
+	}
+	
+	/**
+	 * 编辑卡
+	 * 
+	 * @param txtGroupsSelect
+	 * @return
+	 * @throws UnsupportedEncodingException 
+	 * @throws NoSuchAlgorithmException 
+	 */
+	@ResponseBody
+	@RequestMapping("editCard")
+	@SystemLog(module="礼品卡管理",methods="礼品卡管理-编辑卡")//凡需要处理业务逻辑的.都需要记录操作日志
+	@Transactional(readOnly=false)
+	public String editCard(String cardId){
+		
+		return "success";
+	}
+	
+	/**
+	 * 编辑卡信息页面
+	 * 
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("editCardPage")
+	public String editCardPage(Model model) throws Exception {
+		model.addAttribute("res", findByRes());
+		return Common.BACKGROUND_PATH + "/system/dispCard/editCard";
+	}
+	
+	/**
       * MD5方式加密字符串(当作密码)
       * 
       * @param str
