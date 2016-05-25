@@ -16,7 +16,11 @@
 		SELECT
 			t1.code as code,
 			t1.value as value,
-			t2.orgName as issuedStation,
+			case when t1.status &lt;&gt; '3' then
+				t2.orgName
+			when t1.status = '3' then
+				''
+			end as issuedStation,
 			t1.issuedDate as issuedDate,
 			t4.orgName as useAbledStation,
 			t1.indate as indate,
