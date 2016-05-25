@@ -44,11 +44,11 @@ $(function() {
 		});
 	});
 	// 编辑按钮
-	$("#editAccount").click("click", function() {
+	$("#editCard").click("click", function() {
 		editAccount();
 	});
 	// 删除按钮
-	$("#delAccount").click("click", function() {
+	$("#delCard").click("click", function() {
 		delAccount();
 	});
 });
