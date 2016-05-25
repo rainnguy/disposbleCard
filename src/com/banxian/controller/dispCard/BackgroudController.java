@@ -205,7 +205,7 @@ public class BackgroudController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("stationSelect")
-	public String seletRole(Model model) throws Exception {
+	public String stationSelect(Model model) throws Exception {
 		Map<String, String> orgCodeMap = new HashMap<String, String>();
 		@SuppressWarnings("unchecked")
 		List<Map<String, Object>> stationMap =  (List<Map<String, Object>>) EhcacheUtils.get(SysConsts.SYS_ORGA_DATA);

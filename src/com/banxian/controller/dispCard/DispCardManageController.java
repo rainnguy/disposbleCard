@@ -283,9 +283,17 @@ public class DispCardManageController extends BaseController {
 	public String deleteCard(String cardId){
 		
 		DispCardMap dispCardMap = getFormMap(DispCardMap.class);
-//		dispCardMap.put(key, value);
-//		dispCardMap.put(key, value);
-		
+		dispCardMap.put(SysConsts.OPER_CODE, Common.findAttrValue(SysConsts.OPER_CODE));
+		dispCardMap.put("cardId", cardId);
+	
+		try {
+				int count = dispCardMapper.deleteData(dispCardMap);
+				if(count == 0){
+					return "delete0";
+				}
+		} catch (Exception e) {
+			throw new SystemException("删除卡异常");
+		}
 		return "success";
 	}
 	
@@ -302,6 +310,19 @@ public class DispCardManageController extends BaseController {
 	@SystemLog(module="礼品卡管理",methods="礼品卡管理-编辑卡")//凡需要处理业务逻辑的.都需要记录操作日志
 	@Transactional(readOnly=false)
 	public String editCard(String cardId){
+		
+		DispCardMap dispCardMap = getFormMap(DispCardMap.class);
+		dispCardMap.put(SysConsts.OPER_CODE, Common.findAttrValue(SysConsts.OPER_CODE));
+//		dispCardMap.put("cardId", cardId);
+		
+		try {
+			int count = dispCardMapper.editCardData(dispCardMap);
+			if(count == 0){
+				return "update0";
+			}
+		} catch (Exception e) {
+			throw new SystemException("编辑卡异常");
+		}
 		
 		return "success";
 	}

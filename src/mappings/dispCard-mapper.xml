@@ -275,4 +275,31 @@
 			and delFlag = '0'
 			and indate &lt; DATE_FORMAT(sysdate(),'%Y-%m-%d')
 	</update>
+	
+	<update id="deleteData" parameterType="com.banxian.entity.dispCard.DispCardMap">
+		UPDATE
+			disp_card
+		SET
+			delFlag = '1',
+			operCode = '${operCode}',
+			updateTime = DATE_FORMAT(sysdate(),'%Y-%m-%d %H:%i:%s')
+		WHERE
+			id = '${cardId}'
+			and delFlag = '0'
+	</update>
+	
+	<update id="editCardData" parameterType="com.banxian.entity.dispCard.DispCardMap">
+		UPDATE
+			disp_card
+		SET
+			status = '${status}',
+			operCode = '${operCode}',
+			remark = '${description}'
+			updateTime = DATE_FORMAT(sysdate(),'%Y-%m-%d %H:%i:%s')
+		WHERE
+			id = '${id}'
+			and code = '${code}'
+			and value = '${value}'
+			and delFlag = '0'
+	</update>
 </mapper>

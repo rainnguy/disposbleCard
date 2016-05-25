@@ -45,19 +45,19 @@ $(function() {
 	});
 	// 编辑按钮
 	$("#editCard").click("click", function() {
-		editAccount();
+		editCard();
 	});
 	// 删除按钮
 	$("#delCard").click("click", function() {
-		delAccount();
+		delCard();
 	});
 });
 
 //编辑
-function editAccount() {
+function editCard() {
 	var cbox = grid.getSelectedCheckbox();
 	if (cbox.length > 1 || cbox == "") {
-		layer.msg("请选中一项");
+		layer.msg("请选中一项！");
 		return;
 	}
 	pageii = layer.open({
@@ -69,10 +69,10 @@ function editAccount() {
 }
 
 //删除
-function delAccount() {
+function delCard() {
 	var cbox = grid.getSelectedCheckbox();
 	if (cbox == "") {
-		layer.msg("请选择删除项！！");
+		layer.msg("请选择删除项！");
 		return;
 	}
 	layer.confirm('是否删除？', function(index) {
