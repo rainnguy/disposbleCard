@@ -3,6 +3,10 @@ $(function() {
 	grid = lyGrid({
 		pagId : 'paging',
 		l_column : [ {
+			colkey : "id",
+			name : "id",
+			hide : true
+		}, {
 			colkey : "code",
 			name : "卡号"
 		}, {
@@ -31,8 +35,7 @@ $(function() {
 			name : "消费时间"
 		} ],
 		jsonUrl : rootPath + '/disposableCard/findSpecificationData.sxml',
-		checkbox : true,
-		serNumber : true
+		checkbox : true
 	});
 	$("#search").click("click", function() {// 绑定查询按扭
 		var searchParams = $("#searchForm").serializeJson();// 初始化传参数

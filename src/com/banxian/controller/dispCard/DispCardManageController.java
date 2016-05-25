@@ -277,7 +277,7 @@ public class DispCardManageController extends BaseController {
       * @throws NoSuchAlgorithmException
       * @throws UnsupportedEncodingException
       */
-     public static String encoderByMd5(String str)
+     private static String encoderByMd5(String str)
              throws NoSuchAlgorithmException, UnsupportedEncodingException {
          // 确定计算方法
          MessageDigest md5 = MessageDigest.getInstance("MD5");
@@ -293,7 +293,7 @@ public class DispCardManageController extends BaseController {
       * @param str
       * @return
       */
-     public static boolean isNumeric(String str){
+     private static boolean isNumeric(String str){
     	 Pattern pattern = Pattern.compile("[0-9]*");
     	 return pattern.matcher(str).matches();
     }

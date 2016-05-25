@@ -9,99 +9,129 @@
 	<!-- 以下与实体类的中字段一致 -->
 	
 	<sql id="CommonQualification">
-		<!-- common -->>
+		<!-- common -->
 	</sql>
 	
 	<select id="findSpecificationData" resultType="com.banxian.entity.dispCard.SpecInfoMap">
 		SELECT
-			t1.code as code,
-			t1.value as value,
-			case when t1.status &lt;&gt; '3' then
-				t2.orgName
-			when t1.status = '3' then
-				''
-			end as issuedStation,
-			t1.issuedDate as issuedDate,
-			t4.orgName as useAbledStation,
-			t1.indate as indate,
-			t3.constantName as status,
-			t5.orgName as usedStation,
-			t1.usedTime as usedTime
+			tp.id as id,
+			tp.code as code,
+			tp.value as value,
+			tp.issuedStation as issuedStation,
+			tp.issuedDate as issuedDate,
+			GROUP_CONCAT(tp.useAbledStation SEPARATOR ',') useAbledStation,
+			tp.indate as indate,
+			tp.status as status,
+			tp.usedStation as usedStation,
+			DATE_FORMAT(tp.usedTime,'%Y-%m-%d %H:%i:%s') as usedTime
 		FROM
-			disp_card t1 left join sys_orga t5 on
-				t1.usedStation = t5.orgCode
-				and t5.delFlag = '0'
-				left join sys_orga t4 on
-					t4.orgCode = t1.useAbledStation
-					and t4.delFlag = '0',
-			sys_orga t2,
-			sys_constant t3
-		WHERE
-			((t1.status = '3' and t1.createStation = t2.orgCode)
-			or (t1.status &lt;&gt; '3' and t1.issuedStation = t2.orgCode))
-			and t2.delFlag = '0'
-			and t1.status = t3.constantValue
-			and t3.kind = '11'
-			and t1.delFlag = '0'
-			<if test="status != null and status != ''">
-				and t1.status = '${status}'
-			</if>
-			<choose>
-			<when test="issuedStaName != null and issuedStaName != ''">
-				and t2.orgName like '%${issuedStaName}%'
-			</when>
-			<otherwise>
-				<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
-					and ((t1.status = '3' and t1.createStation = '${orgCode}')
-					or (t1.status &lt;&gt; '3' and t1.issuedStation = '${orgCode}'))
+			(
+			SELECT
+				t1.id as id,
+				t1.code as code,
+				t1.value as value,
+				case when t1.status &lt;&gt; '3' then
+					t2.orgName
+				when t1.status = '3' then
+					''
+				end as issuedStation,
+				t1.issuedDate as issuedDate,
+				t4.orgName as useAbledStation,
+				t1.indate as indate,
+				t3.constantName as status,
+				t5.orgName as usedStation,
+				t1.usedTime as usedTime
+			FROM
+				disp_card t1 left join sys_orga t5 on
+					t1.usedStation = t5.orgCode
+					and t5.delFlag = '0'
+					left join sys_orga t4 on
+						t1.useAbledStation like CONCAT('%',t4.orgCode,'%')
+						and t4.delFlag = '0',
+				sys_orga t2,
+				sys_constant t3
+			WHERE
+				((t1.status = '3' and t1.createStation = t2.orgCode)
+				or (t1.status &lt;&gt; '3' and t1.issuedStation = t2.orgCode))
+				and t2.delFlag = '0'
+				and t1.status = t3.constantValue
+				and t3.kind = '11'
+				and t1.delFlag = '0'
+				<if test="status != null and status != ''">
+					and t1.status = '${status}'
 				</if>
-			</otherwise>
-			</choose>
-			<if test="code != null and code != ''">
-				and t1.code = '${code}'
-			</if>
-			<if test="money != null and money != ''">
-				and t1.value = '${money}'
-			</if>
-			<if test="startDate != null and startDate != ''">
-				and t1.issuedDate &gt;= '${startDate}'
-			</if>
-			<if test="endDate != null and endDate != ''">
-				and t1.issuedDate &lt;= '${endDate}'
-			</if>
-			<if test="inDate != null and inDate != ''">
-				and t1.indate &lt;= '${inDate}'
-			</if>
-		ORDER BY t1.status, t1.code
+				<choose>
+				<when test="issuedStaName != null and issuedStaName != ''">
+					and t2.orgName like '%${issuedStaName}%'
+				</when>
+				<otherwise>
+					<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
+						and ((t1.status = '3' and t1.createStation = '${orgCode}')
+						or (t1.status &lt;&gt; '3' and t1.issuedStation = '${orgCode}'))
+					</if>
+				</otherwise>
+				</choose>
+				<if test="code != null and code != ''">
+					and t1.code = '${code}'
+				</if>
+				<if test="money != null and money != ''">
+					and t1.value = '${money}'
+				</if>
+				<if test="startDate != null and startDate != ''">
+					and t1.issuedDate &gt;= '${startDate}'
+				</if>
+				<if test="endDate != null and endDate != ''">
+					and t1.issuedDate &lt;= '${endDate}'
+				</if>
+				<if test="inDate != null and inDate != ''">
+					and t1.indate &lt;= '${inDate}'
+				</if>
+			ORDER BY t1.status, t1.code
+			) tp
+		GROUP BY tp.code
+		ORDER BY tp.status, tp.indate, tp.code
 	</select>
 	
 	<select id="findIndexPage" resultType="com.banxian.entity.dispCard.DispCardMap">
 		SELECT
-			t1.id as id,
-			t1.code as code,
-			t1.value as value,
-			t3.constantName as status,
-			t2.orgName as useAbledStation,
-			t1.issuedDate as issuedDate,
-			t1.indate as indate
-		FROM
-			disp_card t1,
-			sys_orga t2,
-			sys_constant t3
-		WHERE
-			t1.useAbledStation = t2.orgCode
-			and t2.delFlag = '0'
-			and t1.status = '1'
-			and t1.status = t3.constantValue
-			and t3.kind = '11'
-			and t1.delFlag = '0'
-			<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
-				and t1.issuedStation = '%${orgCode}%'
-			</if>
-			<if test="code != null and code != ''">
-				and t1.code = '${code}'
-			</if>
-		ORDER BY t1.status, t1.indate desc, t1.code
+			tp.id as id,
+			tp.code as code,
+			tp.value as value,
+			tp.status as status,
+			GROUP_CONCAT(tp.useAbledStation SEPARATOR ',') useAbledStation,
+			tp.issuedDate as issuedDate,
+			tp.indate as indate
+		FROM 
+		(
+			SELECT
+				t1.id as id,
+				t1.code as code,
+				t1.value as value,
+				t3.constantName as status,
+				t2.orgName as useAbledStation,
+				t1.issuedDate as issuedDate,
+				t1.indate as indate
+			FROM
+				disp_card t1,
+				sys_orga t2,
+				sys_constant t3
+			WHERE
+				t1.useAbledStation like concat('%',t2.orgCode,'%')
+				and t2.delFlag = '0'
+				and t1.status = '1'
+				and t1.status = t3.constantValue
+				and t3.kind = '11'
+				and t1.delFlag = '0'
+				<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
+					and t1.issuedStation = '%${orgCode}%'
+				</if>
+				<if test="code != null and code != ''">
+					and t1.code = '${code}'
+				</if>
+			ORDER BY t1.status, t1.indate, t1.code
+		) tp
+		GROUP BY tp.code
+		ORDER BY tp.indate, tp.code
 	</select>
 	
 	<update id="consumeCard" parameterType="com.banxian.entity.dispCard.ConsumeCardInfoMap">
@@ -125,16 +155,16 @@
 	</update>
 	
 	<select id="findByCardId" resultType="com.banxian.entity.dispCard.ConsumeCardInfoMap">
-		select
+		SELECT
 			id,
 			code,
 			value,
 			status,
 			indate,
 			useAbledStation
-		from
+		FROM
 			disp_card
-		where
+		WHERE
 			id = '${cardId}'
 	</select>
 	
@@ -159,18 +189,18 @@
 	</update>
 	
 	<select id="findMaxCardId" resultType="String">
-		select
+		SELECT
 			max(code) as maxCode
-		from
+		FROM
 			disp_card
-		where
+		WHERE
 			status = '3'
 			and updateTime &gt;= '${startTime}'
 			and updateTime &lt;= '${nowdate}'
 	</select>
 	
 	<select id="findCreateCardInfo" resultType="com.banxian.entity.dispCard.DispCardMap">
-		select
+		SELECT
 			t1.id as id,
 			t1.code as code,
 			t1.password as password,
@@ -180,10 +210,10 @@
 			t1.updateTime,
 			'%Y-%m-%d %H:%i:%s'
 			) AS updateTime
-		from
+		FROM
 			disp_card t1,
 			sys_orga t2
-		where
+		WHERE
 			t1.createStation = t2.orgCode
 			and t2.delFlag = '0'
 			and t1.delFlag = '0'
@@ -206,11 +236,11 @@
 				</if>
 			</otherwise>
 			</choose>
-		order by id
+		ORDER BY id
 	</select>
 	
 	<insert id="insertNewData" parameterType="com.banxian.entity.dispCard.DispCardMap">
-		insert into disp_card
+		INSERT INTO disp_card
 		(code,
 		password,
 		value,
@@ -220,7 +250,7 @@
 		operCode,
 		updateTime
 		)
-		values
+		VALUES
 		('${code}',
 		'${password}',
 		'${money}',

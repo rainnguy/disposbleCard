@@ -12,6 +12,9 @@ $(function() {
 			colkey : "issuedStaName",
 			name : "发卡站点"
 		}, {
+			colkey : "useAbledStation",
+			name : "限制站点"
+		}, {
 			colkey : "issuedDate",
 			name : "发卡日期"
 		}, {

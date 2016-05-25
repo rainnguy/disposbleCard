@@ -21,7 +21,7 @@
 					</div>
 				</div>
 				<div class="col-sm-3 m-b-xs">
-					<input type="button" class="btn btn-sm btn-default" id="cardSearch" value="确认"/>
+					<input type="button" class="btn btn-sm btn-default" id="cardSearch" value="查询"/>
 					<input type="button" class="btn btn-sm btn-default" id="cardConsume" value="消费"/>
 					<input type="button" class="btn btn-sm btn-default" id="cardSold" value="发卡"/>
 				</div>

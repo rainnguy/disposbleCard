@@ -9,130 +9,147 @@
 	<!-- 以下与实体类的中字段一致 -->
 	
 	<sql id="CommonQualification">
-		and t1.issuedStation = t2.orgCode
-		and t1.status = t3.constantValue
-		and t3.kind = '11'
+		AND t1.issuedStation = t2.orgCode
+		AND t1.status = t3.constantValue
+		AND t3.kind = '11'
 		<choose>
 			<when test="orgName != null and orgName != ''">
-				and t2.orgName like '%${orgName}%'
+				AND t2.orgName like '%${orgName}%'
 			</when>
 			<otherwise>
 				<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
-					and t1.issuedStation = '${orgCode}'
+					AND t1.issuedStation = '${orgCode}'
 				</if>
 			</otherwise>
 		</choose>
 		<if test="money != null and money != ''">
-			and t1.value = '${money}'
+			AND t1.value = '${money}'
 		</if>
 	</sql>
 	
 	<sql id="time">
 		<if test="startDate != null and startDate != ''">
-			and t1.issuedDate &gt;= '${startDate}'
+			AND t1.issuedDate &gt;= '${startDate}'
 		</if>
 		<if test="endDate != null and endDate != ''">
-			and t1.issuedDate &lt;= '${endDate}'
+			AND t1.issuedDate &lt;= '${endDate}'
 		</if>
 	</sql>
 	
 	<sql id="SummaryComPart">
-		select
+		SELECT
 			count(1) totalNum, sum(value) as amount
-		from
+		FROM
 			disp_card,
 			sys_constant,
 			sys_orga
-		where
+		WHERE
 			issuedStation = orgCode
-			and status = constantValue
-			and kind = '11'
+			AND status = constantValue
+			AND kind = '11'
 		<choose>
 			<when test="orgNum != null and orgNum != ''">
-				and issuedStation = '${orgNum}'
+				AND issuedStation = '${orgNum}'
 			</when>
 			<otherwise>
 				<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
-					and issuedStation = '${orgCode}'
+					AND issuedStation = '${orgCode}'
 				</if>
 			</otherwise>
 		</choose>
 		<if test="startDate != null and startDate != ''">
-			and issuedDate &gt;= '${startDate}'
+			AND issuedDate &gt;= '${startDate}'
 		</if>
 		<if test="endDate != null and endDate != ''">
-			and issuedDate &lt;= '${endDate}'
+			AND issuedDate &lt;= '${endDate}'
 		</if>
 	</sql>
 	
 	<select id="findIssuedData" resultType="com.banxian.entity.dispCard.IssuedInfoMap">
-		select
+		SELECT
 			t1.code as code,
 			t1.value as value,
 			t2.orgName as orgName,
 			t1.issuedDate as issuedDate
-		from
+		FROM
 			disp_card t1,
 			sys_orga t2,
 			sys_constant t3
-		where
+		WHERE
 			t1.status &lt;&gt; '3'
 			<include refid="CommonQualification" />
 			<include refid="time" />
-		order by t1.issuedDate desc, t1.code
+		ORDER BY t1.issuedDate desc, t1.code
 	</select>
 	
 	<select id="findUsedData" resultType="com.banxian.entity.dispCard.UsedInfoMap">
-		select
+		SELECT
 			t1.code as code,
 			t1.value as value,
 			t2.orgName as issuedStaName,
 			t4.orgName as usedStaName,
 			DATE_FORMAT(t1.usedTime,'%Y-%m-%d %H:%i:%s') AS usedTime
-		from
+		FROM
 			disp_card t1,
 			sys_orga t2,
 			sys_constant t3,
 			sys_orga t4
-		where
+		WHERE
 			t1.usedStation = t4.orgCode
-			and t1.status = '2'
+			AND t1.status = '2'
 			<include refid="CommonQualification" />
 			<if test="usedStaName != null and usedStaName != ''">
-				and t4.orgName like '%${usedStaName}%'
+				AND t4.orgName like '%${usedStaName}%'
 			</if>
 			<if test="startDate != null and startDate != ''">
-				and t1.usedTime &gt;= '${startDate}'
+				AND t1.usedTime &gt;= '${startDate}'
 			</if>
 			<if test="endDate != null and endDate != ''">
-				and t1.usedTime &lt;= '${endDate}'
+				AND t1.usedTime &lt;= '${endDate}'
 			</if>
-		order by t1.usedTime desc, t1.code
+		ORDER BY t1.usedTime desc, t1.code
 	</select>
 	
 	<select id="findUnusedData" resultType="com.banxian.entity.dispCard.UnusedInfoMap">
-		select
-			t1.code as code,
-			t1.value as value,
-			t2.orgName as issuedStaName,
-			t1.issuedDate as issuedDate,
-			t1.indate as indate
-		from
-			disp_card t1,
-			sys_orga t2,
-			sys_constant t3
-		where
-			t1.status = '1'
-			<include refid="CommonQualification" />
-			<include refid="time" />
-			<if test="inDate != null and inDate != ''">
-				and t1.indate &lt;= '${inDate}'
-			</if>
-		order by t1.indate, t1.code
+		SELECT
+			tp.code as code,
+			tp.value as value,
+			tp.issuedStaName as issuedStaName,
+			GROUP_CONCAT(tp.useAbledStation SEPARATOR ',') useAbledStation,
+			tp.issuedDate as issuedDate,
+			tp.indate as indate
+		FROM
+		(
+			SELECT
+				t1.code as code,
+				t1.value as value,
+				t2.orgName as issuedStaName,
+				t4.orgName as useAbledStation,
+				t1.issuedDate as issuedDate,
+				t1.indate as indate
+			FROM
+				disp_card t1 left join sys_orga t4 on
+					t1.useAbledStation like CONCAT('%',t4.orgCode,'%')
+					AND t4.delFlag = '0',
+				sys_orga t2,
+				sys_constant t3
+			WHERE
+				t1.status = '1'
+				AND t2.delFlag = '0'
+				AND t1.delFlag = '0'
+				<include refid="CommonQualification" />
+				<include refid="time" />
+				<if test="inDate != null and inDate != ''">
+					AND t1.indate &lt;= '${inDate}'
+				</if>
+			ORDER BY t1.indate, t1.code
+		) tp
+		GROUP BY tp.code
+		ORDER BY tp.indate, tp.code
 	</select>
 	
 	<select id="findSummaryData" resultType="com.banxian.entity.dispCard.SummaryInfoMap">
-		select
+		SELECT
 			t1.totalNum as issueTotal,
 			t1.amount as issueAmount,
 			t2.totalNum as usedTotal,
@@ -141,22 +158,22 @@
 			t3.amount as useAbleAmount,
 			t4.totalNum as outDateTotal,
 			t4.amount as outDateAmount
-		from
+		FROM
 			(
 			<include refid="SummaryComPart" />
-			and status &lt;&gt; '3'
+			AND status &lt;&gt; '3'
 			) t1,
 			(
 			<include refid="SummaryComPart" />
-			and status = '2'
+			AND status = '2'
 			) t2,
 			(
 			<include refid="SummaryComPart" />
-			and status = '1'
+			AND status = '1'
 			) t3,
 			(
 			<include refid="SummaryComPart" />
-			and status = '4'
+			AND status = '4'
 			) t4
 	</select>
 	
