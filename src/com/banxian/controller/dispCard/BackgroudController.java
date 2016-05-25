@@ -76,6 +76,9 @@ public class BackgroudController extends BaseController {
 		// 用户所属站的编号
 		dispCardMap.put(SysConsts.ORG_CODE, Common.findAttrValue(SysConsts.ORG_CODE));
 		
+		// 判断过期的卡，并把过期的卡则变成过期状态
+		checkOutdate();
+		
 		pageView.setRecords(DispCardMap.mapper().findIndexPage(dispCardMap));
 
 		return pageView;
@@ -231,5 +234,17 @@ public class BackgroudController extends BaseController {
 		model.addAttribute("orgValue", orgCodeMap);
 		
 		return Common.BACKGROUND_PATH + "/system/dispCard/stationSelect";
+	}
+	
+	/**
+	 * 检查过期卡,并把过期的卡状态改为过期
+	 */
+	private void checkOutdate(){
+		try {
+			dispCardMapper.changeStatus();
+		} catch (Exception e) {
+			throw new SystemException("检查过期卡发生异常");
+		}
+		
 	}
 }

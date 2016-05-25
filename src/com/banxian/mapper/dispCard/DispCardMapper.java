@@ -26,4 +26,6 @@ public interface DispCardMapper extends BaseMapper{
 	public List<DispCardMap> findCreateCardInfo(DispCardMap dispCardMap);
 	
 	public int insertNewData(DispCardMap dispCardMap);
+	
+	public void changeStatus();
 }

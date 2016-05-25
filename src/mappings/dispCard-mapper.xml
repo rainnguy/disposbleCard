@@ -261,4 +261,18 @@
 		'${nowDate}'
 		)
 	</insert>
+	
+	<update id="changeStatus">
+		UPDATE
+			disp_card
+		SET
+			status = '4',
+			operCode = null,
+			remark = '过期',
+			updateTime = DATE_FORMAT(sysdate(),'%Y-%m-%d %H:%i:%s')
+		WHERE
+			status = '1'
+			and delFlag = '0'
+			and indate &lt; DATE_FORMAT(sysdate(),'%Y-%m-%d')
+	</update>
 </mapper>
