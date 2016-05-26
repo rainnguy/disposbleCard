@@ -349,6 +349,16 @@ public class DateUtil {
 	}
 	
 	/**
+	 * get current date
+	 * 
+	 * @return 返回字符型日期 yyyyMMddHHmmss格式
+	 */
+	public static String getCurrDate4() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+		return dateFormat.format(new Date());
+	}
+	
+	/**
 	 * get the start time of today
 	 * 
 	 * @return 返回字符型日期 yyyy-MM-dd 00:00:00格式

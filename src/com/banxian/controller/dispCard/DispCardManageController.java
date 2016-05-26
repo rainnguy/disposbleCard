@@ -109,7 +109,7 @@ public class DispCardManageController extends BaseController {
 	 */
 	@RequestMapping("/exportCreateInfoList")
 	public void exportCreateInfoList(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String fileName = "待生成的卡";
+		String fileName = "待生成的卡_" + DateUtil.getCurrDate4();
 		DispCardMap dispCardMap = findHasHMap(DispCardMap.class);
 		String exportData = dispCardMap.getStr("exportData");// 列表头的json字符串
 
@@ -246,7 +246,7 @@ public class DispCardManageController extends BaseController {
 	 */
 	@RequestMapping("/exportManageInfoList")
 	public void exportManageInfoList(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String fileName = "礼品卡一览";
+		String fileName = "礼品卡一览_" + DateUtil.getCurrDate4();
 		SpecInfoMap specInfoMap = findHasHMap(SpecInfoMap.class);
 		String exportData = specInfoMap.getStr("exportData");// 列表头的json字符串
 

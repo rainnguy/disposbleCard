@@ -22,6 +22,7 @@ import com.banxian.entity.dispCard.UsedInfoMap;
 import com.banxian.mapper.dispCard.CardReportMapper;
 import com.banxian.plugin.PageView;
 import com.banxian.util.Common;
+import com.banxian.util.DateUtil;
 import com.banxian.util.EhcacheUtils;
 import com.banxian.util.JsonUtils;
 import com.banxian.util.POIUtils;
@@ -236,7 +237,7 @@ public class CardReportController extends BaseController {
 	 */
 	@RequestMapping("/exportIssuedList")
 	public void exportIssuedList(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String fileName = "发卡报表";
+		String fileName = "发卡报表_" + DateUtil.getCurrDate4();
 		IssuedInfoMap issuedInfoMap = findHasHMap(IssuedInfoMap.class);
 		String exportData = issuedInfoMap.getStr("exportData");// 列表头的json字符串
 
@@ -255,7 +256,7 @@ public class CardReportController extends BaseController {
 	 */
 	@RequestMapping("/exportUsedList")
 	public void exportUsedList(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String fileName = "消费报表";
+		String fileName = "消费报表_" + DateUtil.getCurrDate4();
 		UsedInfoMap usedInfoMap = findHasHMap(UsedInfoMap.class);
 		String exportData = usedInfoMap.getStr("exportData");// 列表头的json字符串
 
@@ -274,7 +275,7 @@ public class CardReportController extends BaseController {
 	 */
 	@RequestMapping("/exportUnusedList")
 	public void exportUnusedList(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String fileName = "未消费报表";
+		String fileName = "未消费报表_" + DateUtil.getCurrDate4();
 		UnusedInfoMap unusedInfoMap = findHasHMap(UnusedInfoMap.class);
 		String exportData = unusedInfoMap.getStr("exportData");// 列表头的json字符串
 
@@ -293,7 +294,7 @@ public class CardReportController extends BaseController {
 	 */
 	@RequestMapping("/exportSummary")
 	public void exportSummary(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String fileName = "概况统计";
+		String fileName = "概况统计_" + DateUtil.getCurrDate4();
 		SummaryInfoMap summaryInfoMap = findHasHMap(SummaryInfoMap.class);
 		String exportData = summaryInfoMap.getStr("exportData");// 列表头的json字符串
 
