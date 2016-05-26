@@ -19,7 +19,7 @@ $(function() {
 			colkey : "updateTime",
 			name : "生成时间"
 		}],
-		jsonUrl : rootPath + '/disposableCard/searchInfo.sxml',
+		jsonUrl : rootPath + '/disposableCard/createInfo.sxml',
 		checkbox : false
 	});
 	

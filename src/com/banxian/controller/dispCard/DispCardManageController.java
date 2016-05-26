@@ -23,7 +23,6 @@ import sun.misc.BASE64Encoder;
 
 import com.banxian.annotation.SystemLog;
 import com.banxian.controller.index.BaseController;
-import com.banxian.entity.dispCard.CreateCardInfoMap;
 import com.banxian.entity.dispCard.DispCardMap;
 import com.banxian.entity.dispCard.SpecInfoMap;
 import com.banxian.exception.SystemException;
@@ -75,7 +74,7 @@ public class DispCardManageController extends BaseController {
 	}
 	
 	/**
-	 * 查询信息
+	 * 生成的卡的信息
 	 * 
 	 * @param pageNow
 	 * @param pageSize
@@ -83,8 +82,8 @@ public class DispCardManageController extends BaseController {
 	 * @throws Exception
 	 */
 	@ResponseBody
-	@RequestMapping("searchInfo")
-	public PageView searchInfo(String pageNow, String pageSize) throws Exception {
+	@RequestMapping("createInfo")
+	public PageView createInfo(String pageNow, String pageSize) throws Exception {
 
 		DispCardMap dispCardMap = getFormMap(DispCardMap.class);
 		dispCardMap = toFormMap(dispCardMap, pageNow, pageSize);
@@ -102,7 +101,7 @@ public class DispCardManageController extends BaseController {
 	}
 	
 	/**
-	 * 导出待生成的卡信息
+	 * 导出生成的卡信息
 	 * 
 	 * @param request
 	 * @param response
@@ -123,7 +122,6 @@ public class DispCardManageController extends BaseController {
 	/**
 	 * 礼品卡生成处理
 	 * 
-	 * @param txtGroupsSelect
 	 * @return
 	 * @throws UnsupportedEncodingException 
 	 * @throws NoSuchAlgorithmException 
@@ -156,19 +154,13 @@ public class DispCardManageController extends BaseController {
 			return "wrongnumber";
 		}
 		
-		// 当前系统时间
-		String nowdate = DateUtil.getCurrDate();
-		
 		// 当天日期
 		String nowDay = DateUtil.getCurrDate3();
 		
-		CreateCardInfoMap createCardInfoMap = getFormMap(CreateCardInfoMap.class);
-		// 当天的开始时间
-		createCardInfoMap.put("startTime", DateUtil.getStartTime());
-		// 当前系统时间
-		createCardInfoMap.put("nowdate", nowdate);
+		// 当天开始时间
+		dispCardMap.put("startTime", DateUtil.getStartTime());
 		// 获取表中当天的最大卡号
-		String maxCode = CreateCardInfoMap.mapper().findMaxCardId(createCardInfoMap);
+		String maxCode = dispCardMapper.findMaxCardId(dispCardMap);
 		Integer tempCode = 0;
 		if(maxCode != null && maxCode != ""){
 			tempCode = Integer.valueOf(maxCode.substring(12));
@@ -189,7 +181,7 @@ public class DispCardManageController extends BaseController {
 			// 操作编号
 			dispCardMap.put(SysConsts.OPER_CODE, Common.findAttrValue(SysConsts.OPER_CODE));
 			// 当前系统时间
-			dispCardMap.put("nowDate", nowdate);
+			dispCardMap.put("nowDate", DateUtil.getCurrDate());
 			
 			dispCardMapList.add(dispCardMap);
 			

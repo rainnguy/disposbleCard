@@ -197,7 +197,7 @@
 		WHERE
 			status = '3'
 			and updateTime &gt;= '${startTime}'
-			and updateTime &lt;= '${nowdate}'
+			and updateTime &lt;= DATE_FORMAT(sysdate(),'%Y-%m-%d %H:%i:%s')
 			and delFlag = '0'
 	</select>
 	

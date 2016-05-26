@@ -98,6 +98,7 @@ public class BackgroudController extends BaseController {
 		
 		ConsumeCardInfoMap conCardInfoMap = getFormMap(ConsumeCardInfoMap.class);
 		conCardInfoMap.put("cardId", cardId);
+		
 		// 获取该卡的信息
 		conCardInfoMap = ConsumeCardInfoMap.mapper().findByCardId(conCardInfoMap);
 		
@@ -245,6 +246,5 @@ public class BackgroudController extends BaseController {
 		} catch (Exception e) {
 			throw new SystemException("检查过期卡发生异常");
 		}
-		
 	}
 }
