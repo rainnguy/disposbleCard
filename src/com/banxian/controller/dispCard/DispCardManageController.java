@@ -309,11 +309,16 @@ public class DispCardManageController extends BaseController {
 	@RequestMapping("editCard")
 	@SystemLog(module="礼品卡管理",methods="礼品卡管理-编辑卡")//凡需要处理业务逻辑的.都需要记录操作日志
 	@Transactional(readOnly=false)
-	public String editCard(String cardId){
+	public String editCard(String txtGroupsSelect){
+		
+		// 验证可用站点为空
+		if (txtGroupsSelect == null || "".equals(txtGroupsSelect)) {
+			return "notUsableStation";
+		}
 		
 		DispCardMap dispCardMap = getFormMap(DispCardMap.class);
 		dispCardMap.put(SysConsts.OPER_CODE, Common.findAttrValue(SysConsts.OPER_CODE));
-//		dispCardMap.put("cardId", cardId);
+		dispCardMap.put("useAbledStation", txtGroupsSelect);
 		
 		try {
 			int count = dispCardMapper.editCardData(dispCardMap);
@@ -337,6 +342,18 @@ public class DispCardManageController extends BaseController {
 	@RequestMapping("editCardPage")
 	public String editCardPage(Model model) throws Exception {
 		model.addAttribute("res", findByRes());
+		
+		DispCardMap dispCardMap = getFormMap(DispCardMap.class);
+		dispCardMap.put("id", getPara(SysConsts.ID));
+		dispCardMap = dispCardMapper.findEditCardInfo(dispCardMap);
+		
+		model.addAttribute("id", dispCardMap.get("id"));
+		model.addAttribute("code", dispCardMap.get("code"));
+		model.addAttribute("value", dispCardMap.get("value"));
+		model.addAttribute("status", dispCardMap.get("status"));
+		model.addAttribute("useAbledStation", dispCardMap.get("useAbledStation"));
+		model.addAttribute("description", dispCardMap.get("remark"));
+		
 		return Common.BACKGROUND_PATH + "/system/dispCard/editCard";
 	}
 	

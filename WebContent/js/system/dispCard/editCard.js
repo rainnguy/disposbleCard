@@ -12,6 +12,10 @@ $(function() {
 							parent.layer.close(parent.pageii);
 							return false;
 						});
+					} else if (data == "update0"){
+						layer.msg('卡的信息更新无效！', 3);
+					} else if (data == "notUsableStation"){
+						layer.msg('请选择限制站点！', 3);
 					} else {
 						layer.msg('更新失败！', 3);
 					}

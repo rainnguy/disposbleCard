@@ -294,7 +294,8 @@
 		SET
 			status = '${status}',
 			operCode = '${operCode}',
-			remark = '${description}'
+			remark = '${description}',
+			useAbledStation = '${useAbledStation}',
 			updateTime = DATE_FORMAT(sysdate(),'%Y-%m-%d %H:%i:%s')
 		WHERE
 			id = '${id}'
@@ -302,4 +303,18 @@
 			and value = '${value}'
 			and delFlag = '0'
 	</update>
+	
+	<select id="findEditCardInfo" resultType="com.banxian.entity.dispCard.DispCardMap">
+		SELECT
+			id,
+			code,
+			value,
+			status,
+			useAbledStation,
+			remark
+		FROM
+			disp_card
+		WHERE
+			id = '${id}'
+	</select>
 </mapper>

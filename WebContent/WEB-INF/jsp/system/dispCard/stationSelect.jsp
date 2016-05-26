@@ -36,7 +36,7 @@
 		selObj.append(selOpt);
 	
 		var selOpt = $("#selectGroups")[0];
-		alert(selOpt.length);
+		
 		ids = "";
 		for (var i = 0; i < selOpt.length; i++) {
 			ids += (selOpt[i].value  + ",");
@@ -77,7 +77,7 @@
 
 </script>
 <div class="form-group">
-<input id="txtGroupsSelect" type="hidden" value="${txtRoleSelect}" name="txtGroupsSelect" />
+<input id="txtGroupsSelect" type="hidden" value="${useAbledStation}" name="txtGroupsSelect" />
 	<label for="host" class="col-sm-3 control-label">站点   </label>
 	<div class="col-sm-9">
 		<table class="tweenBoxTable" name="groups_tweenbox"

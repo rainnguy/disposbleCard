@@ -32,4 +32,6 @@ public interface DispCardMapper extends BaseMapper{
 	public int deleteData(DispCardMap dispCardMap);
 	
 	public int editCardData(DispCardMap dispCardMap);
+	
+	public DispCardMap findEditCardInfo(DispCardMap dispCardMap);
 }
