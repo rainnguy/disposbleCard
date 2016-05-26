@@ -12,8 +12,8 @@ $(function() {
 							return false;
 						});
 						$("#form")[0].reset();
-					} else if (data == "insert0") {
-						layer.alert('生成新卡失败！', 3);
+					} else if (data == "insertwrong") {
+						layer.alert('生成新卡发生错误！', 3);
 					} else if (data == "nomoney") {
 						layer.alert('请输入金额！', 3);
 					} else if (data == "nonumber") {

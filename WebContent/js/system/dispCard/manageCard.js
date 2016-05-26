@@ -78,11 +78,13 @@ function delCard() {
 	layer.confirm('是否删除？', function(index) {
 		var url = rootPath + '/disposableCard/deleteCard.sxml';
 		var s = CommnUtil.ajax(url, {
-			cardId : cbox.toString()
+			cardIds : cbox.join(",")
 		}, "json");
 		if (s == "success") {
 			layer.msg('删除成功');
 			grid.loadData();
+		} else if(s == "deletewrong") {
+			layer.msg('删除出错');
 		} else {
 			layer.msg('删除失败');
 		}

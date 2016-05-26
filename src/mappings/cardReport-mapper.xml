@@ -47,6 +47,8 @@
 			issuedStation = orgCode
 			AND status = constantValue
 			AND kind = '11'
+			AND disp_card.delFlag = '0'
+			AND sys_orga.delFlag = '0'
 		<choose>
 			<when test="orgNum != null and orgNum != ''">
 				AND issuedStation = '${orgNum}'
@@ -77,6 +79,8 @@
 			sys_constant t3
 		WHERE
 			t1.status &lt;&gt; '3'
+			AND t1.delFlag = '0'
+			AND t2.delFlag = '0'
 			<include refid="CommonQualification" />
 			<include refid="time" />
 		ORDER BY t1.issuedDate desc, t1.code
@@ -97,6 +101,9 @@
 		WHERE
 			t1.usedStation = t4.orgCode
 			AND t1.status = '2'
+			AND t1.delFlag = '0'
+			AND t2.delFlag = '0'
+			AND t4.delFlag = '0'
 			<include refid="CommonQualification" />
 			<if test="usedStaName != null and usedStaName != ''">
 				AND t4.orgName like '%${usedStaName}%'

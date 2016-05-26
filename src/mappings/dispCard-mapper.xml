@@ -166,6 +166,7 @@
 			disp_card
 		WHERE
 			id = '${cardId}'
+			and delFlag = '0'
 	</select>
 	
 	<update id="issueCard" parameterType="com.banxian.entity.dispCard.DispCardMap">
@@ -197,6 +198,7 @@
 			status = '3'
 			and updateTime &gt;= '${startTime}'
 			and updateTime &lt;= '${nowdate}'
+			and delFlag = '0'
 	</select>
 	
 	<select id="findCreateCardInfo" resultType="com.banxian.entity.dispCard.DispCardMap">
@@ -239,7 +241,7 @@
 		ORDER BY id
 	</select>
 	
-	<insert id="insertNewData" parameterType="com.banxian.entity.dispCard.DispCardMap">
+	<insert id="insertNewData" parameterType="java.util.List">
 		INSERT INTO disp_card
 		(code,
 		password,
@@ -251,15 +253,17 @@
 		updateTime
 		)
 		VALUES
-		('${code}',
-		'${password}',
-		'${money}',
-		'3',
-		'${orgCode}',
-		'0',
-		'${operCode}',
-		'${nowDate}'
-		)
+		<foreach collection="list" item="map" open="" separator="," close="">  
+			('${map.code}',
+			'${map.password}',
+			'${map.money}',
+			'3',
+			'${map.orgCode}',
+			'0',
+			'${map.operCode}',
+			'${map.nowDate}'
+			)
+		</foreach>  
 	</insert>
 	
 	<update id="changeStatus">
@@ -284,7 +288,10 @@
 			operCode = '${operCode}',
 			updateTime = DATE_FORMAT(sysdate(),'%Y-%m-%d %H:%i:%s')
 		WHERE
-			id = '${cardId}'
+			id in
+			<foreach collection="cardIds" item="id" separator="," open="(" close=")">
+				'${id}'
+			</foreach>
 			and delFlag = '0'
 	</update>
 	
@@ -316,5 +323,6 @@
 			disp_card
 		WHERE
 			id = '${id}'
+			and delFlag = '0'
 	</select>
 </mapper>

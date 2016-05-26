@@ -197,11 +197,9 @@ public class DispCardManageController extends BaseController {
 		}
 		
 		try {
-			for(DispCardMap map : dispCardMapList){
-				int count = DispCardMap.mapper().insertNewData(map);
-				if(count == 0){
-					return "insert0";
-				}
+			int count = DispCardMap.mapper().insertNewData(dispCardMapList);
+			if(count != dispCardMapList.size()){
+				return "insertwrong";
 			}
 		} catch (Exception e) {
 			throw new SystemException("生成卡异常");
@@ -238,11 +236,9 @@ public class DispCardManageController extends BaseController {
 		SpecInfoMap specInfoMap = getFormMap(SpecInfoMap.class);
 		specInfoMap = toFormMap(specInfoMap, pageNow, pageSize);
 		// 用户权限
-		specInfoMap.put(SysConsts.ROLE_KEY,
-				Common.findAttrValue(SysConsts.ROLE_KEY));
+		specInfoMap.put(SysConsts.ROLE_KEY, Common.findAttrValue(SysConsts.ROLE_KEY));
 		// 用户所属站的编号
-		specInfoMap.put(SysConsts.ORG_CODE,
-				Common.findAttrValue(SysConsts.ORG_CODE));
+		specInfoMap.put(SysConsts.ORG_CODE, Common.findAttrValue(SysConsts.ORG_CODE));
 		
 		pageView.setRecords(SpecInfoMap.mapper().findSpecificationData(specInfoMap));
 
@@ -271,7 +267,7 @@ public class DispCardManageController extends BaseController {
 	/**
 	 * 删除卡
 	 * 
-	 * @param txtGroupsSelect
+	 * @param cardIds
 	 * @return
 	 * @throws UnsupportedEncodingException 
 	 * @throws NoSuchAlgorithmException 
@@ -280,17 +276,18 @@ public class DispCardManageController extends BaseController {
 	@RequestMapping("deleteCard")
 	@SystemLog(module="礼品卡管理",methods="礼品卡管理-删除卡")//凡需要处理业务逻辑的.都需要记录操作日志
 	@Transactional(readOnly=false)
-	public String deleteCard(String cardId){
+	public String deleteCard(String cardIds){
 		
+		String[] ids = cardIds.split(",");
 		DispCardMap dispCardMap = getFormMap(DispCardMap.class);
 		dispCardMap.put(SysConsts.OPER_CODE, Common.findAttrValue(SysConsts.OPER_CODE));
-		dispCardMap.put("cardId", cardId);
+		dispCardMap.put("cardIds", ids);
 	
 		try {
-				int count = dispCardMapper.deleteData(dispCardMap);
-				if(count == 0){
-					return "delete0";
-				}
+			int count = dispCardMapper.deleteData(dispCardMap);
+			if(count != ids.length){
+				return "deletewrong";
+			}
 		} catch (Exception e) {
 			throw new SystemException("删除卡异常");
 		}
