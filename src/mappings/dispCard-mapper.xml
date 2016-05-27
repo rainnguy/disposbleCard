@@ -61,8 +61,8 @@
 					and t1.status = '${status}'
 				</if>
 				<choose>
-				<when test="issuedStaName != null and issuedStaName != ''">
-					and t2.orgName like '%${issuedStaName}%'
+				<when test="orgNum != null and orgNum != ''">
+					and t2.orgCode = '${orgNum}'
 				</when>
 				<otherwise>
 					<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
