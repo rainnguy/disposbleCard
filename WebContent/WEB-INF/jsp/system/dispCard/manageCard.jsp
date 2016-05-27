@@ -55,7 +55,7 @@ $('#inDate').datetimepicker({
 				<label class="control-label">
 				<span class="h4 font-thin v-middle">状态:</span></label>
 				<select id="status"  class="input-large" name="specInfoMap.status">
-					<option value="" selected>选择一种状态</option>
+					<option value="" selected>选择状态</option>
 					<option value="1">可消费</option>
 					<option value="2">已消费</option>
 					<option value="3">未发卡</option>

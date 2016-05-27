@@ -221,7 +221,7 @@ public class DispCardManageController extends BaseController {
 		
 		Map<String, String> orgCodeMap = new HashMap<String, String>();
 		// 设置默认的空值
-		orgCodeMap.put("", "");
+		orgCodeMap.put("", "选择站点");
 		@SuppressWarnings("unchecked")
 		// 获取所有的站点
 		List<Map<String, Object>> stationMap =  (List<Map<String, Object>>) EhcacheUtils.get(SysConsts.SYS_ORGA_DATA);
