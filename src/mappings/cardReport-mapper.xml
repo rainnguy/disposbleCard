@@ -12,16 +12,12 @@
 		AND t1.issuedStation = t2.orgCode
 		AND t1.status = t3.constantValue
 		AND t3.kind = '11'
-		<choose>
-			<when test="orgName != null and orgName != ''">
-				AND t2.orgName like '%${orgName}%'
-			</when>
-			<otherwise>
-				<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
-					AND t1.issuedStation = '${orgCode}'
-				</if>
-			</otherwise>
-		</choose>
+		<if test="orgName != null and orgName != ''">
+			AND t2.orgName like '%${orgName}%'
+		</if>
+		<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
+			AND t1.issuedStation = '${orgCode}'
+		</if>
 		<if test="money != null and money != ''">
 			AND t1.value = '${money}'
 		</if>
