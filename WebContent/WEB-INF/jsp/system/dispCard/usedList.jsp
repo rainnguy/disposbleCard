@@ -21,7 +21,7 @@ $('#endDate').datetimepicker();
 				<label class="control-label"> <span
 					class="h4 font-thin v-middle">发卡站点:</span></label>
 				<input class="input-medium ui-autocomplete-input" id="issuedStaName"
-					name="usedInfoMap.issuedStaName">
+					name="usedInfoMap.orgName">
 			</div>
 			<div class="form-group">
 				<label class="control-label"> <span
