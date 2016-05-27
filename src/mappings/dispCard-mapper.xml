@@ -123,7 +123,7 @@
 				and t3.kind = '11'
 				and t1.delFlag = '0'
 				<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
-					and t1.issuedStation = '%${orgCode}%'
+					and t1.useAbledStation like '%${orgCode}%'
 				</if>
 				<if test="code != null and code != ''">
 					and t1.code = '${code}'
@@ -180,6 +180,7 @@
 			operCode = '${operCode}',
 			remark = '${description}',
 			updateTime = '${nowDate}',
+			issuedStation = '${issuedStation}',
 			issuedDate = '${issuedDate}'
 		WHERE
 			code = '${code}'

@@ -192,6 +192,8 @@ public class BackgroudController extends BaseController {
 		dispCardMap.put(SysConsts.OPER_CODE, Common.findAttrValue(SysConsts.OPER_CODE));
 		// 当前系统时间
 		dispCardMap.put("nowDate", nowdate);
+		// 所属站点
+		dispCardMap.put("issuedStation", Common.findAttrValue(SysConsts.ORG_CODE));
 		// 当前系统日期
 		dispCardMap.put("issuedDate", DateUtil.getDate(new Date()).replaceAll("/", "-"));
 		// 截止日期
