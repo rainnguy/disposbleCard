@@ -145,6 +145,7 @@
 			updateTime = '${nowDate}'
 		WHERE
 			code = '${code}'
+			and password = '${pwd}'
 			and value = '${value}'
 			and status = '1'
 			and indate &gt;= '${nowDate}'

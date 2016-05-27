@@ -1,5 +1,8 @@
 package com.banxian.controller.dispCard;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import sun.misc.BASE64Encoder;
 
 import com.banxian.annotation.SystemLog;
 import com.banxian.controller.index.BaseController;
@@ -112,10 +117,15 @@ public class BackgroudController extends BaseController {
 			return "cannot";
 		}
 		
-		// 卡号
-		conCardInfoMap.put("code", conCardInfoMap.get("code").toString());
-		// 金额
-		conCardInfoMap.put("value", conCardInfoMap.get("value").toString());
+		try {
+			// 通过卡号生成密码，传入sql判断
+			conCardInfoMap.put("pwd", encoderByMd5(conCardInfoMap.get("code").toString()));
+		} catch (NoSuchAlgorithmException e1) {
+			e1.printStackTrace();
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
+		}
+		
 		// 用户权限
 		conCardInfoMap.put(SysConsts.ROLE_KEY, Common.findAttrValue(SysConsts.ROLE_KEY));
 		// 用户所属站的编号
@@ -247,4 +257,23 @@ public class BackgroudController extends BaseController {
 			throw new SystemException("检查过期卡发生异常");
 		}
 	}
+	
+	/**
+     * MD5方式加密字符串(当作密码)
+     * 
+     * @param str
+     *            要加密的字符串
+     * @return 加密后的字符串
+     * @throws NoSuchAlgorithmException
+     * @throws UnsupportedEncodingException
+     */
+    private static String encoderByMd5(String str)
+            throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        // 确定计算方法
+        MessageDigest md5 = MessageDigest.getInstance("MD5");
+        BASE64Encoder base64en = new BASE64Encoder();
+        // 加密后的字符串
+        String newstr = base64en.encode(md5.digest(str.getBytes("utf-8")));
+        return newstr;
+    }
 }
