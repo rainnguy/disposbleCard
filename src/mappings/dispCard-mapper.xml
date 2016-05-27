@@ -218,6 +218,7 @@
 			sys_orga t2
 		WHERE
 			t1.createStation = t2.orgCode
+			and t1.status = '3'
 			and t2.delFlag = '0'
 			and t1.delFlag = '0'
 			<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
