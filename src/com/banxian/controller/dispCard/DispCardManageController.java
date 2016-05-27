@@ -255,6 +255,11 @@ public class DispCardManageController extends BaseController {
 	public void exportManageInfoList(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String fileName = "礼品卡一览_" + DateUtil.getCurrDate4();
 		SpecInfoMap specInfoMap = findHasHMap(SpecInfoMap.class);
+		// 用户权限
+		specInfoMap.put(SysConsts.ROLE_KEY, Common.findAttrValue(SysConsts.ROLE_KEY));
+		// 用户所属站的编号
+		specInfoMap.put(SysConsts.ORG_CODE, Common.findAttrValue(SysConsts.ORG_CODE));
+		
 		String exportData = specInfoMap.getStr("exportData");// 列表头的json字符串
 
 		List<Map<String, Object>> listMap = JsonUtils.parseJSONList(exportData);

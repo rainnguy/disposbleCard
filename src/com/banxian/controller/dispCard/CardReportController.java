@@ -69,11 +69,9 @@ public class CardReportController extends BaseController {
 		UnusedInfoMap unusedInfoMap = getFormMap(UnusedInfoMap.class);
 		unusedInfoMap = toFormMap(unusedInfoMap, pageNow, pageSize);
 		// 用户权限
-		unusedInfoMap.put(SysConsts.ROLE_KEY,
-				Common.findAttrValue(SysConsts.ROLE_KEY));
+		unusedInfoMap.put(SysConsts.ROLE_KEY, Common.findAttrValue(SysConsts.ROLE_KEY));
 		// 用户所属站的编号
-		unusedInfoMap.put(SysConsts.ORG_CODE,
-				Common.findAttrValue(SysConsts.ORG_CODE));
+		unusedInfoMap.put(SysConsts.ORG_CODE, Common.findAttrValue(SysConsts.ORG_CODE));
 		
 		pageView.setRecords(UnusedInfoMap.mapper().findUnusedData(unusedInfoMap));
 
@@ -109,11 +107,9 @@ public class CardReportController extends BaseController {
 		IssuedInfoMap issuedInfoMap = getFormMap(IssuedInfoMap.class);
 		issuedInfoMap = toFormMap(issuedInfoMap, pageNow, pageSize);
 		// 用户权限
-		issuedInfoMap.put(SysConsts.ROLE_KEY,
-				Common.findAttrValue(SysConsts.ROLE_KEY));
+		issuedInfoMap.put(SysConsts.ROLE_KEY, Common.findAttrValue(SysConsts.ROLE_KEY));
 		// 用户所属站的编号
-		issuedInfoMap.put(SysConsts.ORG_CODE,
-				Common.findAttrValue(SysConsts.ORG_CODE));
+		issuedInfoMap.put(SysConsts.ORG_CODE, Common.findAttrValue(SysConsts.ORG_CODE));
 		
 		pageView.setRecords(IssuedInfoMap.mapper().findIssuedData(issuedInfoMap));
 
@@ -149,11 +145,9 @@ public class CardReportController extends BaseController {
 		UsedInfoMap usedInfoMap = getFormMap(UsedInfoMap.class);
 		usedInfoMap = toFormMap(usedInfoMap, pageNow, pageSize);
 		// 用户权限
-		usedInfoMap.put(SysConsts.ROLE_KEY,
-				Common.findAttrValue(SysConsts.ROLE_KEY));
+		usedInfoMap.put(SysConsts.ROLE_KEY, Common.findAttrValue(SysConsts.ROLE_KEY));
 		// 用户所属站的编号
-		usedInfoMap.put(SysConsts.ORG_CODE,
-				Common.findAttrValue(SysConsts.ORG_CODE));
+		usedInfoMap.put(SysConsts.ORG_CODE, Common.findAttrValue(SysConsts.ORG_CODE));
 		
 		pageView.setRecords(UsedInfoMap.mapper().findUsedData(usedInfoMap));
 
@@ -239,6 +233,11 @@ public class CardReportController extends BaseController {
 	public void exportIssuedList(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String fileName = "发卡报表_" + DateUtil.getCurrDate4();
 		IssuedInfoMap issuedInfoMap = findHasHMap(IssuedInfoMap.class);
+		// 用户权限
+		issuedInfoMap.put(SysConsts.ROLE_KEY, Common.findAttrValue(SysConsts.ROLE_KEY));
+		// 用户所属站的编号
+		issuedInfoMap.put(SysConsts.ORG_CODE, Common.findAttrValue(SysConsts.ORG_CODE));
+		
 		String exportData = issuedInfoMap.getStr("exportData");// 列表头的json字符串
 
 		List<Map<String, Object>> listMap = JsonUtils.parseJSONList(exportData);
@@ -258,6 +257,11 @@ public class CardReportController extends BaseController {
 	public void exportUsedList(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String fileName = "消费报表_" + DateUtil.getCurrDate4();
 		UsedInfoMap usedInfoMap = findHasHMap(UsedInfoMap.class);
+		// 用户权限
+		usedInfoMap.put(SysConsts.ROLE_KEY, Common.findAttrValue(SysConsts.ROLE_KEY));
+		// 用户所属站的编号
+		usedInfoMap.put(SysConsts.ORG_CODE, Common.findAttrValue(SysConsts.ORG_CODE));
+		
 		String exportData = usedInfoMap.getStr("exportData");// 列表头的json字符串
 
 		List<Map<String, Object>> listMap = JsonUtils.parseJSONList(exportData);
@@ -277,6 +281,11 @@ public class CardReportController extends BaseController {
 	public void exportUnusedList(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String fileName = "未消费报表_" + DateUtil.getCurrDate4();
 		UnusedInfoMap unusedInfoMap = findHasHMap(UnusedInfoMap.class);
+		// 用户权限
+		unusedInfoMap.put(SysConsts.ROLE_KEY, Common.findAttrValue(SysConsts.ROLE_KEY));
+		// 用户所属站的编号
+		unusedInfoMap.put(SysConsts.ORG_CODE, Common.findAttrValue(SysConsts.ORG_CODE));
+		
 		String exportData = unusedInfoMap.getStr("exportData");// 列表头的json字符串
 
 		List<Map<String, Object>> listMap = JsonUtils.parseJSONList(exportData);
@@ -296,6 +305,11 @@ public class CardReportController extends BaseController {
 	public void exportSummary(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String fileName = "概况统计_" + DateUtil.getCurrDate4();
 		SummaryInfoMap summaryInfoMap = findHasHMap(SummaryInfoMap.class);
+		// 用户权限
+		summaryInfoMap.put(SysConsts.ROLE_KEY, Common.findAttrValue(SysConsts.ROLE_KEY));
+		// 用户所属站的编号
+		summaryInfoMap.put(SysConsts.ORG_CODE, Common.findAttrValue(SysConsts.ORG_CODE));
+		
 		String exportData = summaryInfoMap.getStr("exportData");// 列表头的json字符串
 
 		List<Map<String, Object>> listMap = JsonUtils.parseJSONList(exportData);
