@@ -111,6 +111,13 @@ public class DispCardManageController extends BaseController {
 	public void exportCreateInfoList(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String fileName = "待生成的卡_" + DateUtil.getCurrDate4();
 		DispCardMap dispCardMap = findHasHMap(DispCardMap.class);
+		// 用户权限
+		dispCardMap.put(SysConsts.ROLE_KEY, Common.findAttrValue(SysConsts.ROLE_KEY));
+		// 用户所属站的编号
+		dispCardMap.put(SysConsts.ORG_CODE, Common.findAttrValue(SysConsts.ORG_CODE));
+		// 当天日期
+		dispCardMap.put("nowDate", DateUtil.getCurrDate2());
+		
 		String exportData = dispCardMap.getStr("exportData");// 列表头的json字符串
 
 		List<Map<String, Object>> listMap = JsonUtils.parseJSONList(exportData);
