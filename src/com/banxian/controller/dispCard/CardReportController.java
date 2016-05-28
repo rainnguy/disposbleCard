@@ -41,7 +41,7 @@ public class CardReportController extends BaseController {
 	private CardReportMapper cardReportMapper;
 	
 	/**
-	 * 未消费报表
+	 * 可消费报表
 	 * 
 	 * @param model
 	 * @return
@@ -54,7 +54,7 @@ public class CardReportController extends BaseController {
 	}
 	
 	/**
-	 * 未消费报表
+	 * 可消费报表
 	 * 
 	 * @param pageNow
 	 * @param pageSize
@@ -117,7 +117,7 @@ public class CardReportController extends BaseController {
 	}
 	
 	/**
-	 * 消费报表
+	 * 已消费报表
 	 * 
 	 * @param model
 	 * @return
@@ -130,7 +130,7 @@ public class CardReportController extends BaseController {
 	}
 	
 	/**
-	 *  消费报表
+	 * 已消费报表
 	 * 
 	 * @param pageNow
 	 * @param pageSize
@@ -247,7 +247,7 @@ public class CardReportController extends BaseController {
 	}
 	
 	/**
-	 * 导出消费报表
+	 * 导出已消费报表
 	 * 
 	 * @param request
 	 * @param response
@@ -255,7 +255,7 @@ public class CardReportController extends BaseController {
 	 */
 	@RequestMapping("/exportUsedList")
 	public void exportUsedList(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String fileName = "消费报表_" + DateUtil.getCurrDate4();
+		String fileName = "已消费报表_" + DateUtil.getCurrDate4();
 		UsedInfoMap usedInfoMap = findHasHMap(UsedInfoMap.class);
 		// 用户权限
 		usedInfoMap.put(SysConsts.ROLE_KEY, Common.findAttrValue(SysConsts.ROLE_KEY));
@@ -271,7 +271,7 @@ public class CardReportController extends BaseController {
 	}
 	
 	/**
-	 * 导出未消费报表
+	 * 导出可消费报表
 	 * 
 	 * @param request
 	 * @param response
@@ -279,7 +279,7 @@ public class CardReportController extends BaseController {
 	 */
 	@RequestMapping("/exportUnusedList")
 	public void exportUnusedList(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String fileName = "未消费报表_" + DateUtil.getCurrDate4();
+		String fileName = "可消费报表_" + DateUtil.getCurrDate4();
 		UnusedInfoMap unusedInfoMap = findHasHMap(UnusedInfoMap.class);
 		// 用户权限
 		unusedInfoMap.put(SysConsts.ROLE_KEY, Common.findAttrValue(SysConsts.ROLE_KEY));
