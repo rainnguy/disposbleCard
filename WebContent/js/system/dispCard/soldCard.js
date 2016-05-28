@@ -14,9 +14,9 @@ $(function() {
 						$("#form")[0].reset();
 					} else if (data == "updates0") {
 						layer.alert('发卡失败,请确认卡号和金额！', 3);
-					} else if (data == "notUsableStation") {
+					} else if (data == "noUsableStation") {
 						layer.alert('请选择可使用的站点！', 3);
-					} else if (data == "notCode") {
+					} else if (data == "noCode") {
 						layer.alert('请输入卡号！', 3);
 					} else {
 						layer.alert('发卡异常！', 3);

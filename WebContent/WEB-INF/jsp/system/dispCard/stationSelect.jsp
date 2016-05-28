@@ -92,8 +92,8 @@
 					<td><select id="selectGroups" multiple="multiple"
 						class="input-large" name="selectGroups"
 						style="height: 150px; width: 150px">
-						<c:forEach items="${userRole}" var="key">
-						<option value="${key.id}">${key.roleName}</option>
+						<c:forEach items="${orgSelect}" var="map">
+						<option value="${map.key}">${map.value}</option>
 						</c:forEach>
 					</select></td>
 					<td align="center">

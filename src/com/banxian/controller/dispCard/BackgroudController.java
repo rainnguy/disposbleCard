@@ -22,6 +22,7 @@ import com.banxian.annotation.SystemLog;
 import com.banxian.controller.index.BaseController;
 import com.banxian.entity.dispCard.ConsumeCardInfoMap;
 import com.banxian.entity.dispCard.DispCardMap;
+import com.banxian.entity.dispCard.OrgSelectMap;
 import com.banxian.exception.SystemException;
 import com.banxian.mapper.dispCard.DispCardMapper;
 import com.banxian.plugin.PageView;
@@ -172,13 +173,13 @@ public class BackgroudController extends BaseController {
 		
 		// 验证可用站点为空
 		if (txtGroupsSelect == null || "".equals(txtGroupsSelect)) {
-			return "notUsableStation";
+			return "noUsableStation";
 		}
 		DispCardMap dispCardMap = getFormMap(DispCardMap.class);
 		// 验证卡号为空
 		Object code = dispCardMap.get("code");
 		if(code == null || "".equals(code.toString())){
-			return "notCode";
+			return "noCode";
 		}
 		
 		// 限制站点
@@ -219,17 +220,36 @@ public class BackgroudController extends BaseController {
 	 */
 	@RequestMapping("stationSelect")
 	public String stationSelect(Model model) throws Exception {
+		
+		model.addAttribute("res", findByRes());
+		
+		// 待选择的站的MAP
 		Map<String, String> orgCodeMap = new HashMap<String, String>();
+		// 已选择的站的MAP
+		OrgSelectMap orgSelectMap = getFormMap(OrgSelectMap.class);
+		// 定义已选择的站
+		String useAbledStation = null;
+		if(!orgSelectMap.isEmpty() && !orgSelectMap.get("useAbledStation").toString().isEmpty()){
+			useAbledStation = orgSelectMap.get("useAbledStation").toString();
+		}
+		orgSelectMap.clear();
+		
+		// 所有站的MAP
 		@SuppressWarnings("unchecked")
 		List<Map<String, Object>> stationMap =  (List<Map<String, Object>>) EhcacheUtils.get(SysConsts.SYS_ORGA_DATA);
 		
 		// 用户权限
 		String roleKey=Common.findAttrValue(SysConsts.ROLE_KEY);
+		// 根据用户权限设定待选择的站和已选择的站的值
 		if("admin".equals(roleKey)){
 			for(Map<String, Object> map : stationMap){
 				String orgName = (String) map.get("orgName");
 				String orgNum = (String) map.get("orgCode");
-				orgCodeMap.put(orgNum, orgName);
+				if(useAbledStation == null || useAbledStation.indexOf(orgNum) < 0){
+					orgCodeMap.put(orgNum, orgName);
+				}else{
+					orgSelectMap.put(orgNum, orgName);
+				}
 			}
 		}else{
 			// 用户所属站的编号
@@ -240,11 +260,17 @@ public class BackgroudController extends BaseController {
 				if(selfOrgCode.equals(orgNum)){
 					// 当前记录的名称
 					String orgName = map.get("orgName").toString();
-					orgCodeMap.put(orgNum, orgName);
+					
+					if(useAbledStation == null || useAbledStation.indexOf(orgNum) < 0){
+						orgCodeMap.put(orgNum, orgName);
+					}else{
+						orgSelectMap.put(orgNum, orgName);
+					}
 				}
 			}
 		}
 		model.addAttribute("orgValue", orgCodeMap);
+		model.addAttribute("orgSelect", orgSelectMap);
 		
 		return Common.BACKGROUND_PATH + "/system/dispCard/stationSelect";
 	}

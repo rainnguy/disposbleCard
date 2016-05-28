@@ -54,7 +54,7 @@ $(function() {
 function consumeCard() {
 	var cbox = grid.getSelectedCheckbox();
 	if (cbox.length > 1 || cbox == "") {
-		layer.msg("请选其中一项！！");
+		layer.msg("请选其中一项！");
 		return;
 	}
 	var url = rootPath + '/index/consumeCard.sxml';

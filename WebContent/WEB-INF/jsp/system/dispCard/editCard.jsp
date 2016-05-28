@@ -64,7 +64,7 @@
 				</select>
 			</div>
 			<div class="line line-dashed line-lg pull-in"></div>
-			<div class="form-group" id="selRole" data-url="/index/stationSelect.sxml?useAbledStation="+${useAbledStation}></div>
+			<div class="form-group" id="selRole" data-url="/index/stationSelect.sxml?orgSelectMap.useAbledStation=${useAbledStation}"></div>
 			<div class="line line-dashed line-lg pull-in"></div>
 			
 			<div class="form-group">
