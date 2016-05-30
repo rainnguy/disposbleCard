@@ -236,7 +236,7 @@ public class BackgroudController extends BaseController {
 		
 		// 所有站的MAP
 		@SuppressWarnings("unchecked")
-		List<Map<String, Object>> stationMap =  (List<Map<String, Object>>) EhcacheUtils.get(SysConsts.SYS_ORGA_DATA);
+		List<Map<String, Object>> stationMap = (List<Map<String, Object>>) EhcacheUtils.get(SysConsts.SYS_ORGA_DATA);
 		
 		// 用户权限
 		String roleKey=Common.findAttrValue(SysConsts.ROLE_KEY);

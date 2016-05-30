@@ -275,7 +275,6 @@
 		SET
 			status = '4',
 			operCode = null,
-			remark = '过期',
 			updateTime = DATE_FORMAT(sysdate(),'%Y-%m-%d %H:%i:%s')
 		WHERE
 			status = '1'
@@ -301,12 +300,17 @@
 	<update id="editCardData" parameterType="com.banxian.entity.dispCard.DispCardMap">
 		UPDATE
 			disp_card
-		SET
-			status = '${status}',
+		<set>
 			operCode = '${operCode}',
-			remark = '${description}',
 			useAbledStation = '${useAbledStation}',
+			<if test='status == "2" and change == "1"'>
+				status = '1',
+				usedStation = null,
+				usedTime = null,
+			</if>
+			remark = '${description}',
 			updateTime = DATE_FORMAT(sysdate(),'%Y-%m-%d %H:%i:%s')
+		</set>
 		WHERE
 			id = '${id}'
 			and code = '${code}'

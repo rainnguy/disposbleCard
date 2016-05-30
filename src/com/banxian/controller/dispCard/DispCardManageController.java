@@ -219,36 +219,8 @@ public class DispCardManageController extends BaseController {
 	public String manage(Model model) throws Exception {
 		model.addAttribute("res", findByRes());
 		
-		Map<String, String> orgCodeMap = new HashMap<String, String>();
-		// 设置默认的空值
-		orgCodeMap.put("", "选择站点");
-		@SuppressWarnings("unchecked")
-		// 获取所有的站点
-		List<Map<String, Object>> stationMap =  (List<Map<String, Object>>) EhcacheUtils.get(SysConsts.SYS_ORGA_DATA);
-
-		// 用户权限
-		String roleKey=Common.findAttrValue(SysConsts.ROLE_KEY);
-		if("admin".equals(roleKey)){
-			for(Map<String, Object> map : stationMap){
-				String orgName = (String) map.get("orgName");
-				String orgNum = (String) map.get("orgCode");
-				orgCodeMap.put(orgNum, orgName);
-			}
-		}else{
-			// 用户所属站的编号
-			String selfOrgCode=Common.findAttrValue(SysConsts.ORG_CODE);
-			for(Map<String, Object> map : stationMap){
-				//  当前记录的编号
-				String orgNum = map.get("orgCode").toString();
-				if(selfOrgCode.equals(orgNum)){
-					// 当前记录的名称
-					String orgName = map.get("orgName").toString();
-					orgCodeMap.put(orgNum, orgName);
-				}
-			}
-		}
-		
-		model.addAttribute("orgValue", orgCodeMap);
+		// 获取可选择的站点
+		getOrgs(model);
 		
 		return Common.BACKGROUND_PATH + "/system/dispCard/manageCard";
 	}
@@ -346,14 +318,14 @@ public class DispCardManageController extends BaseController {
 	@Transactional(readOnly=false)
 	public String editCard(String txtGroupsSelect){
 		
+		DispCardMap dispCardMap = getFormMap(DispCardMap.class);
+		
 		// 验证可用站点为空
-		if (txtGroupsSelect == null || "".equals(txtGroupsSelect)) {
-			return "notUsableStation";
+		if (txtGroupsSelect != null && !txtGroupsSelect.isEmpty()) {
+			dispCardMap.put("useAbledStation", txtGroupsSelect);
 		}
 		
-		DispCardMap dispCardMap = getFormMap(DispCardMap.class);
 		dispCardMap.put(SysConsts.OPER_CODE, Common.findAttrValue(SysConsts.OPER_CODE));
-		dispCardMap.put("useAbledStation", txtGroupsSelect);
 		
 		try {
 			int count = dispCardMapper.editCardData(dispCardMap);
@@ -390,6 +362,45 @@ public class DispCardManageController extends BaseController {
 		model.addAttribute("description", dispCardMap.get("remark"));
 		
 		return Common.BACKGROUND_PATH + "/system/dispCard/editCard";
+	}
+	
+	/**
+	 * 获取可选择的站点
+	 * 
+	 * @param model
+	 */
+	private void getOrgs(Model model){
+		
+		Map<String, String> orgCodeMap = new HashMap<String, String>();
+		// 设置默认的空值
+		orgCodeMap.put("", "选择站点");
+		@SuppressWarnings("unchecked")
+		// 获取所有的站点
+		List<Map<String, Object>> stationMap = (List<Map<String, Object>>) EhcacheUtils.get(SysConsts.SYS_ORGA_DATA);
+
+		// 用户权限
+		String roleKey = Common.findAttrValue(SysConsts.ROLE_KEY);
+		if("admin".equals(roleKey)){
+			for(Map<String, Object> map : stationMap){
+				String orgName = (String) map.get("orgName");
+				String orgNum = (String) map.get("orgCode");
+				orgCodeMap.put(orgNum, orgName);
+			}
+		}else{
+			// 用户所属站的编号
+			String selfOrgCode = Common.findAttrValue(SysConsts.ORG_CODE);
+			for(Map<String, Object> map : stationMap){
+				//  当前记录的编号
+				String orgNum = map.get("orgCode").toString();
+				if(selfOrgCode.equals(orgNum)){
+					// 当前记录的名称
+					String orgName = map.get("orgName").toString();
+					orgCodeMap.put(orgNum, orgName);
+				}
+			}
+		}
+		
+		model.addAttribute("orgValue", orgCodeMap);
 	}
 	
 	/**

@@ -8,6 +8,7 @@
 <script type="text/javascript" src="${ctx}/js/system/dispCard/editCard.js"></script>
 <script type="text/javascript">
 	function statusSelected(){
+		// 初始选中状态
 		var status="${status}";
 		var obj=document.getElementById("status");
 		for(var i=0;i<obj.options.length;i++){
@@ -15,6 +16,12 @@
 				obj.options[i].selected=true;
 				break;
 			}
+		}
+		
+		if (status == "2"){
+			document.getElementById("change").disabled=false;
+		} else {
+			document.getElementById("change").disabled=true;
 		}
 	}
 </script>
@@ -35,8 +42,9 @@
 	<div class="l_err" style="width: 100%; margin-top: 2px;"></div>
 	<form id="form" name="form" class="form-horizontal" method="post"
 		action="${ctx}/disposableCard/editCard.sxml">
-		<input type="hidden" class="form-control"
-			value="${id}" name="dispCardMap.id" id="id">
+		<input type="hidden" class="form-control" value="${id}" name="dispCardMap.id" id="id">
+		<input type="hidden" class="form-control" value="${useAbledStation}" name="dispCardMap.useAbledStation">
+		<input type="hidden" class="form-control" value="${status}" name="dispCardMap.status">
 		<section class="panel panel-default">
 		<div class="panel-body">
 			<div class="form-group">
@@ -55,14 +63,19 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-3 control-label">状态:</label>
-				<select id="status" class="input-large" name="dispCardMap.status">
-					<option value="1">可消费</option>
-					<option value="2">已消费</option>
-					<option value="3">未发卡</option>
-					<option value="4">已过期</option>
-				</select>
+				<label class="col-sm-3 control-label">状态</label>
+				<div class="col-sm-9">
+					<select id="status" class="input-large" name="dispCardMap.status" disabled="disabled">
+						<option value="1">可消费</option>
+						<option value="2">已消费</option>
+						<option value="3">未发卡</option>
+						<option value="4">已过期</option>
+					</select>
+					<input type="radio" id="change" name="dispCardMap.change" value="1" />改为未消费
+					<input type="radio" id="change" name="dispCardMap.change" value="0" checked="checked" />不更改 
+				</div>
 			</div>
+			
 			<div class="line line-dashed line-lg pull-in"></div>
 			<div class="form-group" id="selRole" data-url="/index/stationSelect.sxml?orgSelectMap.useAbledStation=${useAbledStation}"></div>
 			<div class="line line-dashed line-lg pull-in"></div>
@@ -79,7 +92,7 @@
 		<button type="submit" class="btn btn-success btn-s-xs">保存</button>
 		</footer> </section>
 	</form>
-	<script type="text/javascript">
+<script type="text/javascript">
 	onloadurl();
 </script>
 </body>
