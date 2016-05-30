@@ -86,7 +86,7 @@ label[class^="btn btn-default"] {
 			</div>
 		</div>
 		<footer class="panel-footer text-right bg-light lter">
-		<button type="submit" class="btn btn-success btn-s-xs">提交</button>
+		<input type="submit" class="btn btn-success btn-s-xs" id="userFormButton" vlaue="提交" />
 		</footer> </section>
 	</form>
 	<script type="text/javascript">
