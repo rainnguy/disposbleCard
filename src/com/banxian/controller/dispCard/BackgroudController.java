@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
@@ -178,8 +179,16 @@ public class BackgroudController extends BaseController {
 		DispCardMap dispCardMap = getFormMap(DispCardMap.class);
 		// 验证卡号为空
 		Object code = dispCardMap.get("code");
-		if(code == null || "".equals(code.toString())){
+		if (code == null || "".equals(code.toString())) {
 			return "noCode";
+		}
+		
+		// 验证金额为数字
+		Object money = dispCardMap.get("value");
+		if (money != null && !money.toString().isEmpty()) {
+			if (!isNumeric(money.toString())) {
+				return "wrongmoney";
+			}
 		}
 		
 		// 限制站点
@@ -304,4 +313,15 @@ public class BackgroudController extends BaseController {
         String newstr = base64en.encode(md5.digest(str.getBytes("utf-8")));
         return newstr;
     }
+    
+    /**
+     * 判断字符串是否为数字
+     * 
+     * @param str
+     * @return
+     */
+    private static boolean isNumeric(String str){
+   	 Pattern pattern = Pattern.compile("[0-9]*");
+   	 return pattern.matcher(str).matches();
+   }
 }

@@ -18,6 +18,8 @@ $(function() {
 						layer.alert('请选择可使用的站点！', 3);
 					} else if (data == "noCode") {
 						layer.alert('请输入卡号！', 3);
+					} else if (data == "wrongmoney") {
+						layer.alert('金额请输入数字！', 3);
 					} else {
 						layer.alert('发卡异常！', 3);
 					}
