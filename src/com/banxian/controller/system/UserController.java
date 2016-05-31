@@ -113,13 +113,6 @@ public class UserController extends BaseController {
 	public void download(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String fileName = "用户列表";
 		UserFormBean userFormMap = findHasHMap(UserFormBean.class);
-		//exportData = 
-		// [{"colkey":"sql_info","name":"SQL语句","hide":false},
-		// {"colkey":"total_time","name":"总响应时长","hide":false},
-		// {"colkey":"avg_time","name":"平均响应时长","hide":false},
-		// {"colkey":"record_time","name":"记录时间","hide":false},
-		// {"colkey":"call_count","name":"请求次数","hide":false}
-		// ]
 		String exportData = userFormMap.getStr("exportData");// 列表头的json字符串
 
 		List<Map<String, Object>> listMap = JsonUtils.parseJSONList(exportData);
@@ -179,18 +172,21 @@ public class UserController extends BaseController {
 	@RequestMapping("editPassword")
 	@ResponseBody
 	@Transactional
-	@SystemLog(module="系统管理",methods="用户管理-修改密码")//凡需要处理业务逻辑的.都需要记录操作日志
+//	@SystemLog(module="系统管理",methods="用户管理-修改密码")//凡需要处理业务逻辑的.都需要记录操作日志
 	public Map<String, Object> editPassword() throws Exception{
 		// 当验证都通过后，把用户信息放在session里
 		UserFormBean userFormMap = getFormMap(UserFormBean.class);
+		@SuppressWarnings("unchecked")
+		String accountName = (String) ((HashMap<String, Object>) Common.findUserSession()).get(SysConsts.ACC_NAME);
+		userFormMap.put(SysConsts.ACC_NAME, accountName);
 		Subject user = SecurityUtils.getSubject();
 		UsernamePasswordToken token = new UsernamePasswordToken(user.getPrincipal().toString(), userFormMap.getStr("oldpassword"));
 		Map<String, Object> map = new HashMap<String, Object>(); 
 		try {
 			user.login(token);
 			userFormMap.put("id", Common.findUserSessionId());
-			userFormMap.put("accountName", user.getPrincipal());
-			userFormMap.put("password", userFormMap.get("newpassword"));
+			userFormMap.put(SysConsts.ACC_NAME, user.getPrincipal());
+			userFormMap.put(SysConsts.PASS_WORD, userFormMap.get("newpassword"));
 			//这里对修改的密码进行加密
 			PasswordHelper passwordHelper = new PasswordHelper();
 			passwordHelper.encryptPassword(userFormMap);
