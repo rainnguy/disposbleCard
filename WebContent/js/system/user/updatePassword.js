@@ -37,7 +37,7 @@ $(function() {
 				type : "post",
 				dataType : "json",//ajaxSubmi带有文件上传的。不需要设置json
 				success : function(data) {
-					if (data == "success") {
+					if (data.results == "success") {
 						layer.confirm('修改密码成功!是否关闭窗口?', function(index) {
 							layer.close(index);
 							var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
@@ -50,11 +50,11 @@ $(function() {
 			});
 		},
 		rules : {
-			"userFormMap.newpassword" : {
+			"userFormBean.newpassword" : {
 				minlength: 6,
 				required : true
 			},
-			"userFormMap.confirmpassword": {
+			"userFormBean.confirmpassword": {
 				required : true,
 				minlength: 6,
 //				same:true, 
@@ -62,11 +62,11 @@ $(function() {
 			}
 		},
 		messages : {
-			"userFormMap.newpassword" : {
+			"userFormBean.newpassword" : {
 				required : "请输入新密码",
 				minlength: jQuery.format("密码不能小于{0}个字 符")
 			},
-			"userFormMap.confirmpassword" : {
+			"userFormBean.confirmpassword" : {
 				required : "请输入确认密码",
 				minlength: jQuery.format("密码不能小于{0}个字 符"),
 				equalTo : "新密码和确认密码不一致"

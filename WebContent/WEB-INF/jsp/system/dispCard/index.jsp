@@ -10,13 +10,20 @@
 			${key.menuDesc}
 		</c:forEach>
 	</div>
+	<script type="text/javascript">
+		$('#cardNo').keypress(function(e) {
+			if (e.keyCode == 13) {
+				e.preventDefault();
+			}
+		})
+	</script>
 <body>
 	<section class="panel panel-default">
 		<form id="cardIndexform" name="cardIndexform" class="form-vertical" action="${pageContext.servletContext.contextPath }/index/consumeCard.sxml" method="post">
 			<div class="row wrapper">
 				<div class="col-sm-2">
 					<div class="input-group">
-						<input type="text" class="input-sm form-control" name="dispCardMap.code"
+						<input type="text" class="input-medium ui-autocomplete-input" name="dispCardMap.code" id="cardNo"
 							placeholder="卡号">
 					</div>
 				</div>

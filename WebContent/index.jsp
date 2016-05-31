@@ -100,48 +100,6 @@
 				</li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right m-n hidden-xs nav-user">
-				<li class="hidden-xs"><a href="index.html#"
-					class="dropdown-toggle dk" data-toggle="dropdown"> <i
-						class="fa fa-bell"></i> <span
-						class="badge badge-sm up bg-danger m-l-n-sm count"
-						style="display: inline-block;">3</span>
-				</a>
-					<section class="dropdown-menu aside-xl">
-						<section class="panel bg-white">
-							<header class="panel-heading b-light bg-light">
-								<strong>You have <span class="count"
-									style="display: inline;">3</span> notifications
-								</strong>
-							</header>
-							<div class="list-group list-group-alt animated fadeInRight">
-								<a href="index.html#" class="media list-group-item"
-									style="display: block;"><span
-									class="pull-left thumb-sm text-center"><i
-										class="fa fa-envelope-o fa-2x text-success"></i></span><span
-									class="media-body block m-b-none">Sophi sent you a email<br>
-										<small class="text-muted">1 minutes ago</small></span></a> <a
-									href="index.html#" class="media list-group-item"> <span
-									class="pull-left thumb-sm"> <img
-										src="${ctx}/notebook/notebook_files/avatar.jpg"
-										alt="John said" class="img-circle">
-								</span> <span class="media-body block m-b-none"> Use awesome
-										animate.css<br> <small class="text-muted">10
-											minutes ago</small>
-								</span>
-								</a> <a href="index.html#" class="media list-group-item"> <span
-									class="media-body block m-b-none"> 1.0 initial released<br>
-										<small class="text-muted">1 hour ago</small>
-								</span>
-								</a>
-							</div>
-							<footer class="panel-footer text-sm">
-								<a href="index.html#" class="pull-right"><i
-									class="fa fa-cog"></i></a> <a href="index.html#notes"
-									data-toggle="class:show animated fadeInRight">See all the
-									notifications</a>
-							</footer>
-						</section>
-					</section></li>
 				<li class="dropdown hidden-xs"><a href="index.html#"
 					class="dropdown-toggle dker" data-toggle="dropdown"><i
 						class="fa fa-fw fa-search"></i></a>
@@ -165,19 +123,16 @@
 					class="dropdown-toggle" data-toggle="dropdown"> <span
 						class="thumb-sm avatar pull-left"> <img
 							src="${ctx}/notebook/notebook_files/avatar.jpg">
-					</span> ${userFormMap.accName} <b class="caret"></b>
-				</a>
+					</span> ${userFormBean.accName} <b class="caret"></b>
+					</a>
 					<ul class="dropdown-menu animated fadeInRight">
 						<span class="arrow top"></span>
 						<li><a href="index.sxml#">Settings</a></li>
 						<li><a href="#" onclick="javascript:updatePasswordLayer();">密码修改</a></li>
-						<li><a href="index.html#"> <span
-								class="badge bg-danger pull-right">3</span> Notifications
-						</a></li>
-						<li><a href="docs.html">Help</a></li>
 						<li class="divider"></li>
 						<li><a href="logout.sxml">Logout</a></li>
-					</ul></li>
+					</ul>
+				</li>
 			</ul>
 		</header>
 		<section>
@@ -239,53 +194,11 @@
 							</div>
 						</section>
 						<footer class="footer lt hidden-xs b-t b-dark">
-							<div id="chat" class="dropup">
-								<section class="dropdown-menu on aside-md m-l-n">
-									<section class="panel bg-white">
-										<header class="panel-heading b-b b-light">Active
-											chats</header>
-										<div class="panel-body animated fadeInRight">
-											<p class="text-sm">No active chats.</p>
-											<p>
-												<a href="#" class="btn btn-sm btn-default">Start a chat</a>
-											</p>
-										</div>
-									</section>
-								</section>
-							</div>
-							<div id="invite" class="dropup">
-								<section class="dropdown-menu on aside-md m-l-n">
-									<section class="panel bg-white">
-										<header class="panel-heading b-b b-light">
-											John <i class="fa fa-circle text-success"></i>
-										</header>
-										<div class="panel-body animated fadeInRight">
-											<p class="text-sm">No contacts in your lists.</p>
-											<p>
-												<a href="#" class="btn btn-sm btn-facebook"><i
-													class="fa fa-fw fa-facebook"></i> Invite from Facebook</a>
-											</p>
-										</div>
-									</section>
-								</section>
-							</div>
 							<a href="#nav" data-toggle="class:nav-xs"
 								class="pull-right btn btn-sm btn-dark btn-icon"> <i
 								class="fa fa-angle-left text"></i> <i
 								class="fa fa-angle-right text-active"></i>
 							</a>
-							<div class="btn-group hidden-nav-xs">
-								<button type="button" title="Chats"
-									class="btn btn-icon btn-sm btn-dark" data-toggle="dropdown"
-									data-target="#chat">
-									<i class="fa fa-comment-o"></i>
-								</button>
-								<button type="button" title="Contacts"
-									class="btn btn-icon btn-sm btn-dark" data-toggle="dropdown"
-									data-target="#invite">
-									<i class="fa fa-facebook"></i>
-								</button>
-							</div>
 						</footer>
 					</section>
 				</aside>
